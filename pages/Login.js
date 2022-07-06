@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   logo: {
     height: 40,
     width: 250,
-    marginBottom: 60,
+    marginBottom: '15%',
   },
   inputPart: {
     margin: 5,
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     paddingLeft: 30
   }, 
   loginButtonGray: {
-    marginTop: 15,
+    marginTop: '5%',
     height: 50,
     width: '70%',
     borderRadius: 25,
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray'
   },
   loginButtonOrange: {
-    marginTop: 15,
+    marginTop: '5%',
     height: 50,
     width: '70%',
     borderRadius: 25,
@@ -217,8 +217,8 @@ const styles = StyleSheet.create({
   loginWithText: {
     color: 'white',
     fontSize: 12,
-    marginTop: 50,
-    marginBottom: 12
+    marginTop: '15%',
+    marginBottom: '3%'
   },
   socials: {
     margin: 8,
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     width: 25
   },
   signUpContainer: {
-    marginTop: 50,
+    marginTop: '13%',
     alignItems: 'center',
     justifyContent:'center',
 

@@ -1,15 +1,17 @@
 import React, { Component }  from 'react';
 import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity } from 'react-native';
 
+// import OTP Input View
+import OTPInputView from '@twotalltotems/react-native-otp-input'
+
 const bgImage = '../assets/bg-image.png';
 
-export default class SignUp2 extends Component {  
+export default class SignUp3 extends Component {  
   constructor() {
     super();
     
     this.state = { 
-      password: '',
-      confirmPassword: '', 
+      otpCode: ''
     };
   }
 
@@ -28,66 +30,51 @@ export default class SignUp2 extends Component {
                 />
               </View>
 
-              {/* Sign Up input */}
+              {/* OTP Verification input */}
               <View style={styles.alignItemCenter}>
                 <View style={styles.inputPart}> 
-                  <Text style={styles.text}>
-                    Pasword
+                  <Text style={styles.label}>
+                    OTP Verification
                   </Text>
-                  <TextInput
-                    secureTextEntry={true}
-                    style={styles.input}
-                    onChangeText={(val) => {this.setState({password: val})}}  
-                  />
-                </View>
-                <View style={styles.inputPart}> 
                   <Text style={styles.text}>
-                    Confirm Password
+                    Please enter verification code sent to *mobile number*
                   </Text>
-                  <TextInput
-                    secureTextEntry={true}
-                    style={styles.input}
-                    onChangeText={(val) => {this.setState({confirmPassword: val})}}  
-                  />
-                </View>
-              </View>
-
-              {/* Terms and Conditions & Privacy Policy */}
-              <View style={styles.alignItemCenter}>
-                <View style={styles.conditionsContainer}>
-                  <View style={styles.row}>
-                    <Text style={styles.conditionsText}>
-                      By clicking Continue, you agree to our 
-                    </Text>
-                      <TouchableOpacity onPress={() => alert('Terms and Conditions')}>
-                        <Text style={styles.underline}>
-                          {" "} Terms and Conditions {" "}
-                        </Text>
-                      </TouchableOpacity>
-                      <Text style={styles.conditionsText}>
-                       and that you have read our 
-                      </Text>
-                      <TouchableOpacity onPress={() => alert('Privacy Policy')}>
-                        <Text style={styles.underline}>
-                          {" "} Privacy Policy
-                        </Text>
-                      </TouchableOpacity>
-                    <Text style={styles.conditionsText}>
-                      .
-                    </Text>
+                  <View>
+                    <OTPInputView 
+                      style={{width: '70%', height: 60}}
+                      pinCount={6} 
+                      codeInputFieldStyle={styles.codeInputFieldStyle}
+                      onCodeFilled={(code) => {this.setState({otpCode: code})}}
+                    />
                   </View>
                 </View>
               </View>
 
-              {/* Continue Button */}
+              {/* Resend Code */}
               <View style={styles.alignItemCenter}>
-                { this.state.password == '' || this.state.confirmPassword == ''  ?
+                <View style={styles.resendCodeContainer}>
+                  <View style={styles.row}>
+                    <Text style={styles.resendCodeText}>
+                      Didn't receive the verification code? {" "}
+                    </Text>
+                    <TouchableOpacity onPress={() => alert('Resend OTP')}>
+                        <Text style={styles.underline}>
+                          Resend
+                        </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+
+              {/* Verify Button */}
+              <View style={styles.alignItemCenter}>
+                { this.state.otpCode == ''  ?
                 <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
-                  <Text style={styles.signUpButtonText}>CONTINUE</Text>
+                  <Text style={styles.signUpButtonText}>VERIFY</Text>
                 </TouchableOpacity>
                 :
-                <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.props.navigation.navigate('SignUp3')}>
-                  <Text style={styles.signUpButtonText}>CONTINUE</Text>
+                <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => alert('Verify')}>
+                  <Text style={styles.signUpButtonText}>VERIFY</Text>
                 </TouchableOpacity>
                 }
               </View>
@@ -120,7 +107,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   alignItemCenter: {
-    alignItems: 'center',
+    alignItems: 'center'
   },
   logo: {
     height: 40,
@@ -128,48 +115,51 @@ const styles = StyleSheet.create({
     marginBottom: '15%',
   },
   inputPart: {
-    margin: 5,
+    marginTop: 10,
     width: '70%',
     justifyContent: 'center',
-    alignItems: 'flex-start'
+    alignItems: 'center',
+  },
+  codeInputFieldStyle: {
+    backgroundColor: 'white',
+    color: 'black',
+    width: 30,
+    height: 30,
+    margin: 7,
+    textDecorationLine: 'underline',
+    textDecorationColor: 'rgb(223,131,68)'
+  },
+  label: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight:'bold',
+    marginBottom: 30
   },
   text: {
     fontSize: 15,
-    paddingLeft: 8,
-    paddingBottom: 3,
-    color: 'white'
+    color: 'white',
+    textAlign: 'center',
+    marginBottom: 30
   }, 
-  input: {
-    fontSize: 15,
-    height: 50,
-    width: '100%',
-    paddingLeft: 20,
-    paddingRight: 20,
-    borderRadius: 25,
-    backgroundColor: 'white'
-  },
-  conditionsContainer: {
-    marginTop: '30%',
+  resendCodeContainer: {
+    marginTop: '15%',
+    alignItems: 'center',
     justifyContent:'center',
-    marginBottom: '1%',
   },
   row: {
     flexDirection: 'row',
-    justifyContent:'center',
-    flexWrap: 'wrap',
   },
-  conditionsText: {
+  resendCodeText: {
     color: 'white',
     fontSize: 10,
-    alignItems: 'center',
   },
   underline: {
     color: 'white',
-    fontSize: 10,
-    textDecorationLine: 'underline',
+    fontSize: 11,
+    textDecorationLine: 'underline'
   },
   signUpButtonGray: {
-    marginTop: '4%',
+    marginTop: '20%',
     height: 50,
     width: '70%',
     borderRadius: 25,
@@ -178,7 +168,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray'
   },
   signUpButtonOrange: {
-    marginTop: '4%',
+    marginTop: '20%',
     height: 50,
     width: '70%',
     borderRadius: 25,

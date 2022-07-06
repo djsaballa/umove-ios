@@ -78,7 +78,7 @@ export default class SignUp1 extends Component {
                   <Text style={styles.signUpButtonText}>NEXT</Text>
                 </TouchableOpacity>
                 :
-                <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => alert('Next Step')}>
+                <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.props.navigation.navigate('SignUp2')}>
                   <Text style={styles.signUpButtonText}>NEXT</Text>
                 </TouchableOpacity>
                 }
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   logo: {
     height: 40,
     width: 250,
-    marginBottom: 60,
+    marginBottom: '15%',
   },
   inputPart: {
     margin: 5,
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   signUpButtonGray: {
-    marginTop: 70,
+    marginTop: '20%',
     height: 50,
     width: '70%',
     borderRadius: 25,
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray'
   },
   signUpButtonOrange: {
-    marginTop: 15,
+    marginTop: '20%',
     height: 50,
     width: '70%',
     borderRadius: 25,
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     fontWeight:'bold'
   },
   loginContainer: {
-    marginTop: 20,
+    marginTop: '5%',
     alignItems: 'center',
     justifyContent:'center',
   },
