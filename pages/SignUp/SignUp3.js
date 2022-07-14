@@ -4,7 +4,7 @@ import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpa
 // import OTP Input View
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 
-const bgImage = '../assets/bg-image.png';
+const bgImage = '../../assets/bg-image.png';
 
 export default class SignUp3 extends Component {  
   constructor() {
@@ -25,7 +25,7 @@ export default class SignUp3 extends Component {
               {/* Logo */}
               <View style={styles.alignItemCenter}>
                 <Image
-                  source={require('../assets/logo/logo2-shadow.png')}
+                  source={require('../../assets/logo/logo.png')}
                   style={styles.logo}
                 />
               </View>
@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0, 0.50)',
   },
   content: {
     flex: 1,
@@ -110,8 +109,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   logo: {
-    height: 40,
-    width: 250,
+    height: 50,
+    width: 240,
     marginBottom: '15%',
   },
   inputPart: {

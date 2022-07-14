@@ -1,17 +1,15 @@
 import React, { Component }  from 'react';
 import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity } from 'react-native';
 
-const bgImage = '../assets/bg-image.png';
+const bgImage = '../../assets/bg-image.png';
 
-export default class SignUp1 extends Component { 
+export default class SignUp2 extends Component {  
   constructor() {
     super();
     
     this.state = { 
-      lastName: '',
-      firstName: '', 
-      email: '',
-      mobileNumber: ''
+      password: '',
+      confirmPassword: '', 
     };
   }
 
@@ -25,79 +23,73 @@ export default class SignUp1 extends Component {
               {/* Logo */}
               <View style={styles.alignItemCenter}>
                 <Image
-                  source={require('../assets/logo/logo2-shadow.png')}
+                  source={require('../../assets/logo/logo.png')}
                   style={styles.logo}
                 />
               </View>
 
               {/* Sign Up input */}
               <View style={styles.alignItemCenter}>
-              <View style={styles.inputPart}> 
+                <View style={styles.inputPart}> 
                   <Text style={styles.text}>
-                    Last Name
+                    Pasword
                   </Text>
                   <TextInput
+                    secureTextEntry={true}
                     style={styles.input}
-                    onChangeText={(val) => {this.setState({lastName: val})}}  
+                    onChangeText={(val) => {this.setState({password: val})}}  
                   />
                 </View>
                 <View style={styles.inputPart}> 
                   <Text style={styles.text}>
-                    First Name
+                    Confirm Password
                   </Text>
                   <TextInput
+                    secureTextEntry={true}
                     style={styles.input}
-                    onChangeText={(val) => {this.setState({firstName: val})}}  
-                  />
-                </View>
-                <View style={styles.inputPart}> 
-                  <Text style={styles.text}>
-                    Email Address
-                  </Text>
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={(val) => {this.setState({email: val})}}  
-                  />
-                </View>
-                <View style={styles.inputPart}> 
-                  <Text style={styles.text}>
-                    Mobile Number
-                  </Text>
-                  <TextInput
-                    style={styles.input}
-                    keyboardType='numbers-and-punctuation'           
-                    onChangeText={(val) => {this.setState({mobileNumber: val})}}  
+                    onChangeText={(val) => {this.setState({confirmPassword: val})}}  
                   />
                 </View>
               </View>
 
-              {/* Next Button */}
+              {/* Terms and Conditions & Privacy Policy */}
               <View style={styles.alignItemCenter}>
-                { this.state.lastName == '' || this.state.firstName == '' || this.state.email == '' || this.state.mobileNumber == ''  ?
-                <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
-                  <Text style={styles.signUpButtonText}>NEXT</Text>
-                </TouchableOpacity>
-                :
-                <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.props.navigation.navigate('SignUp2')}>
-                  <Text style={styles.signUpButtonText}>NEXT</Text>
-                </TouchableOpacity>
-                }
-              </View>
-
-              {/* Login */}
-              <View style={styles.alignItemCenter}>
-                <View style={styles.loginContainer}>
+                <View style={styles.conditionsContainer}>
                   <View style={styles.row}>
-                    <Text style={styles.loginText}>
-                      Already have an account? {" "}
+                    <Text style={styles.conditionsText}>
+                      By clicking Continue, you agree to our 
                     </Text>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+                      <TouchableOpacity onPress={() => alert('Terms and Conditions')}>
                         <Text style={styles.underline}>
-                          Log In
+                          {" "} Terms and Conditions {" "}
                         </Text>
-                    </TouchableOpacity>
+                      </TouchableOpacity>
+                      <Text style={styles.conditionsText}>
+                       and that you have read our 
+                      </Text>
+                      <TouchableOpacity onPress={() => alert('Privacy Policy')}>
+                        <Text style={styles.underline}>
+                          {" "} Privacy Policy
+                        </Text>
+                      </TouchableOpacity>
+                    <Text style={styles.conditionsText}>
+                      .
+                    </Text>
                   </View>
                 </View>
+              </View>
+
+              {/* Continue Button */}
+              <View style={styles.alignItemCenter}>
+                { this.state.password == '' || this.state.confirmPassword == ''  ?
+                <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
+                  <Text style={styles.signUpButtonText}>CONTINUE</Text>
+                </TouchableOpacity>
+                :
+                <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.props.navigation.navigate('SignUp3')}>
+                  <Text style={styles.signUpButtonText}>CONTINUE</Text>
+                </TouchableOpacity>
+                }
               </View>
 
             </View>
@@ -121,18 +113,17 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0, 0.50)',
   },
   content: {
     flex: 1,
     justifyContent: 'center',
   },
   alignItemCenter: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   logo: {
-    height: 40,
-    width: 250,
+    height: 50,
+    width: 240,
     marginBottom: '15%',
   },
   inputPart: {
@@ -156,8 +147,28 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     backgroundColor: 'white'
   },
+  conditionsContainer: {
+    marginTop: '30%',
+    justifyContent:'center',
+    marginBottom: '1%',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent:'center',
+    flexWrap: 'wrap',
+  },
+  conditionsText: {
+    color: 'white',
+    fontSize: 10,
+    alignItems: 'center',
+  },
+  underline: {
+    color: 'white',
+    fontSize: 10,
+    textDecorationLine: 'underline',
+  },
   signUpButtonGray: {
-    marginTop: '20%',
+    marginTop: '4%',
     height: 50,
     width: '70%',
     borderRadius: 25,
@@ -166,7 +177,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray'
   },
   signUpButtonOrange: {
-    marginTop: '20%',
+    marginTop: '4%',
     height: 50,
     width: '70%',
     borderRadius: 25,
@@ -179,21 +190,4 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight:'bold'
   },
-  loginContainer: {
-    marginTop: '5%',
-    alignItems: 'center',
-    justifyContent:'center',
-  },
-  row: {
-    flexDirection: 'row',
-  },
-  loginText: {
-    color: 'white',
-    fontSize: 12,
-  },
-  underline: {
-    color: 'white',
-    fontSize: 12,
-    textDecorationLine: 'underline',
-  }
 })

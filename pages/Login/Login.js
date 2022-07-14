@@ -2,7 +2,7 @@ import React, { Component }  from 'react';
 import { StyleSheet, View, ImageBackground, Image, Text, TextInput,  TouchableOpacity } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 
-const bgImage = '../assets/bg-image.png';
+const bgImage = '../../assets/bg-image.png';
 
 export default class Login extends Component {  
   constructor() {
@@ -25,7 +25,7 @@ export default class Login extends Component {
               {/* Logo */}
               <View style={styles.alignItemCenter}>
                 <Image
-                  source={require('../assets/logo/logo2-shadow.png')}
+                  source={require('../../assets/logo/logo.png')}
                   style={styles.logo}
                 />
               </View>
@@ -63,7 +63,7 @@ export default class Login extends Component {
                     onPress={() => {this.setState({checkbox: !this.state.checkbox})}}
                     style={styles.checkbox}
                   />
-                  <TouchableOpacity onPress={() => alert('forgot password')}>
+                  <TouchableOpacity onPress={() => this.props.navigation.navigate('ForgotPassword')}>
                     <Text style={styles.forgotPassword}>Forgot Password?</Text>
                   </TouchableOpacity>
                 </View>
@@ -88,19 +88,19 @@ export default class Login extends Component {
                 <View style={styles.row}>
                   <TouchableOpacity onPress={() => alert('Login w/ google')}>
                     <Image
-                      source={require('../assets/socials/google.png')}
+                      source={require('../../assets/icon/google.png')}
                       style={styles.socials}
                     />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => alert('Login w/ facebook')}>
                     <Image
-                      source={require('../assets/socials/facebook.png')}
+                      source={require('../../assets/icon/facebook.png')}
                       style={styles.socials}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => alert('Login w/ twitter')}>  
+                  <TouchableOpacity onPress={() => alert('Login w/ fingerprint')}>  
                     <Image
-                      source={require('../assets/socials/twitter.png')}
+                      source={require('../../assets/icon/fingerprint.png')}
                       style={styles.socials}
                     />
                   </TouchableOpacity>
@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0, 0.50)',
   },
   content: {
     flex: 1,
@@ -153,8 +152,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   logo: {
-    height: 40,
-    width: 250,
+    height: 50,
+    width: 240,
     marginBottom: '15%',
   },
   inputPart: {
