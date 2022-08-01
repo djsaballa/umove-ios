@@ -50,6 +50,7 @@ export default class ForgotPassword extends Component {
 
               {/* Send Button */}
               <View style={styles.alignItemCenter}>
+                {/* Make button gray when not all inputs are filled out, orange when filled out */}
                 { this.state.email == ''  ?
                 <TouchableOpacity style={styles.sendButtonGray} disabled={true}>
                   <Text style={styles.sendButtonText}>SEND</Text>
@@ -143,7 +144,11 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent:'center',
     alignItems: 'center',
-    backgroundColor: 'gray'
+    backgroundColor: 'gray',
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 6},
+    shadowOpacity: 0.9,
+    shadowRadius: 3,
   },
   sendButtonOrange: {
     marginTop: '40%',
@@ -152,7 +157,11 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent:'center',
     alignItems: 'center',
-    backgroundColor: 'rgb(223,131,68)'
+    backgroundColor: 'rgb(223,131,68)',
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 6},
+    shadowOpacity: 0.9,
+    shadowRadius: 3,
   },
   sendButtonText: {
     color: 'white',

@@ -71,6 +71,7 @@ export default class Login extends Component {
 
               {/* Login Button */}
               <View style={styles.alignItemCenter}>
+                {/* Make button gray when not all inputs are filled out, orange when filled out */}
                 { this.state.email == '' || this.state.password == '' ?
                 <TouchableOpacity style={styles.loginButtonGray} disabled={true}>
                   <Text style={styles.loginButtonText}>LOG IN</Text>
@@ -197,7 +198,11 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent:'center',
     alignItems: 'center',
-    backgroundColor: 'gray'
+    backgroundColor: 'gray',
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 6},
+    shadowOpacity: 0.9,
+    shadowRadius: 3,
   },
   loginButtonOrange: {
     marginTop: '5%',
@@ -206,7 +211,11 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent:'center',
     alignItems: 'center',
-    backgroundColor: 'rgb(223,131,68)'
+    backgroundColor: 'rgb(223,131,68)',
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 6},
+    shadowOpacity: 0.9,
+    shadowRadius: 3,
   },
   loginButtonText: {
     color: 'white',

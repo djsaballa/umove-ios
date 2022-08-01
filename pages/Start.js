@@ -21,7 +21,7 @@ export default class Start extends Component {
 
               {/* Buttons */}
               <View style={styles.alignItemCenter}>
-                <TouchableOpacity style={styles.quickQuotationButton} onPress={() => this.props.navigation.navigate('QuickQuotation')}>
+                <TouchableOpacity style={styles.quickQuotationButton} onPress={() => this.props.navigation.navigate('QuickQuotation1')}>
                   <Text style={styles.buttonText}>Quick Quotation</Text>
                 </TouchableOpacity>
               </View>
@@ -72,18 +72,22 @@ const styles = StyleSheet.create({
     marginBottom: '15%',
   },
   row: {
-    marginTop: '30%',
+    marginTop: '15%',
     flexDirection: 'row',
     alignItems: 'center',    
   },
   quickQuotationButton: {
-    marginTop: '5%',
+    marginTop: '35%',
     height: 50,
     width: '55%',
     borderRadius: 10,
     justifyContent:'center',
     alignItems: 'center',
-    backgroundColor: 'rgb(223,131,68)'
+    backgroundColor: 'rgb(223,131,68)',
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 6},
+    shadowOpacity: 0.9,
+    shadowRadius: 3,
   },
   loginButton: {
     height: 50,
@@ -91,7 +95,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent:'center',
     alignItems: 'center',
-    backgroundColor: 'rgb(223,131,68)'
+    backgroundColor: 'rgb(223,131,68)',
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 6},
+    shadowOpacity: 0.9,
+    shadowRadius: 3,
   },
   signupButton: {
     marginLeft: '8%',
@@ -100,7 +108,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent:'center',
     alignItems: 'center',
-    backgroundColor: 'rgb(223,131,68)'
+    backgroundColor: 'rgb(223,131,68)',
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 6},
+    shadowOpacity: 0.9,
+    shadowRadius: 3,
   },
   buttonText: {
     color: 'white',

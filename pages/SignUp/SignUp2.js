@@ -81,6 +81,7 @@ export default class SignUp2 extends Component {
 
               {/* Continue Button */}
               <View style={styles.alignItemCenter}>
+                {/* Make button gray when not all inputs are filled out, orange when filled out */}
                 { this.state.password == '' || this.state.confirmPassword == ''  ?
                 <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
                   <Text style={styles.signUpButtonText}>CONTINUE</Text>
@@ -174,7 +175,11 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent:'center',
     alignItems: 'center',
-    backgroundColor: 'gray'
+    backgroundColor: 'gray',
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 6},
+    shadowOpacity: 0.9,
+    shadowRadius: 3,
   },
   signUpButtonOrange: {
     marginTop: '4%',
@@ -183,7 +188,11 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent:'center',
     alignItems: 'center',
-    backgroundColor: 'rgb(223,131,68)'
+    backgroundColor: 'rgb(223,131,68)',
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 6},
+    shadowOpacity: 0.9,
+    shadowRadius: 3,
   },
   signUpButtonText: {
     color: 'white',
