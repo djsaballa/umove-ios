@@ -99,7 +99,7 @@ export default class QuickQuotation1 extends Component {
               <TextInput
                 style={styles.widthLengthWeightInput}
                 onChangeText={(width) => {this.setState({width})}}
-                keyboardType='number-pad'
+                keyboardType='decimal-pad'
                 returnKeyType='done'
               />
           </View>
@@ -109,7 +109,7 @@ export default class QuickQuotation1 extends Component {
             <TextInput
                 style={styles.widthLengthWeightInput}
                 onChangeText={(length) => {this.setState({length})}}
-                keyboardType='number-pad'
+                keyboardType='decimal-pad'
                 returnKeyType='done'
               />
           </View>
@@ -123,7 +123,7 @@ export default class QuickQuotation1 extends Component {
               <TextInput
                 style={styles.widthLengthWeightInput}
                 onChangeText={(weight) => {this.setState({weight})}}
-                keyboardType='number-pad'
+                keyboardType='decimal-pad'
                 returnKeyType='done'
               />
           </View>
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     marginTop: '5%',
     height: 50,
     width: '90%',
-    borderRadius: 25,
+    borderRadius: 7,
     justifyContent:'center',
     alignItems: 'center',
     backgroundColor: 'rgb(223,131,68)',
