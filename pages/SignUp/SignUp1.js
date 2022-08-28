@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 const bgImage = '../../assets/bg-image.png';
 
@@ -17,94 +17,96 @@ export default class SignUp1 extends Component {
 
   render() {
     return(
-      <View style={styles.container}>
-        <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
-          <View style={styles.innerContainer}>
-            <View style={styles.content}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
+          <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
+            <View style={styles.innerContainer}>
+              <View style={styles.content}>
 
-              {/* Logo */}
-              <View style={styles.alignItemCenter}>
-                <Image
-                  source={require('../../assets/logo/logo.png')}
-                  style={styles.logo}
-                />
-              </View>
-
-              {/* Sign Up input */}
-              <View style={styles.alignItemCenter}>
-              <View style={styles.inputPart}> 
-                  <Text style={styles.text}>
-                    Last Name
-                  </Text>
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={(val) => {this.setState({lastName: val})}}  
+                {/* Logo */}
+                <View style={styles.alignItemCenter}>
+                  <Image
+                    source={require('../../assets/logo/logo.png')}
+                    style={styles.logo}
                   />
                 </View>
+
+                {/* Sign Up input */}
+                <View style={styles.alignItemCenter}>
                 <View style={styles.inputPart}> 
-                  <Text style={styles.text}>
-                    First Name
-                  </Text>
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={(val) => {this.setState({firstName: val})}}  
-                  />
-                </View>
-                <View style={styles.inputPart}> 
-                  <Text style={styles.text}>
-                    Email Address
-                  </Text>
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={(val) => {this.setState({email: val})}}  
-                  />
-                </View>
-                <View style={styles.inputPart}> 
-                  <Text style={styles.text}>
-                    Mobile Number
-                  </Text>
-                  <TextInput
-                    style={styles.input}
-                    keyboardType='numbers-and-punctuation'           
-                    onChangeText={(val) => {this.setState({mobileNumber: val})}}  
-                  />
-                </View>
-              </View>
-
-              {/* Next Button */}
-              <View style={styles.alignItemCenter}>
-                {/* Make button gray when not all inputs are filled out, orange when filled out */}
-                { this.state.lastName == '' || this.state.firstName == '' || this.state.email == '' || this.state.mobileNumber == ''  ?
-                <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
-                  <Text style={styles.signUpButtonText}>NEXT</Text>
-                </TouchableOpacity>
-                :
-                <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.props.navigation.navigate('SignUp2')}>
-                  <Text style={styles.signUpButtonText}>NEXT</Text>
-                </TouchableOpacity>
-                }
-              </View>
-
-              {/* Login */}
-              <View style={styles.alignItemCenter}>
-                <View style={styles.loginContainer}>
-                  <View style={styles.row}>
-                    <Text style={styles.loginText}>
-                      Already have an account? {" "}
+                    <Text style={styles.text}>
+                      Last Name
                     </Text>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
-                        <Text style={styles.underline}>
-                          Log In
-                        </Text>
-                    </TouchableOpacity>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={(val) => {this.setState({lastName: val})}}  
+                    />
+                  </View>
+                  <View style={styles.inputPart}> 
+                    <Text style={styles.text}>
+                      First Name
+                    </Text>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={(val) => {this.setState({firstName: val})}}  
+                    />
+                  </View>
+                  <View style={styles.inputPart}> 
+                    <Text style={styles.text}>
+                      Email Address
+                    </Text>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={(val) => {this.setState({email: val})}}  
+                    />
+                  </View>
+                  <View style={styles.inputPart}> 
+                    <Text style={styles.text}>
+                      Mobile Number
+                    </Text>
+                    <TextInput
+                      style={styles.input}
+                      keyboardType='numbers-and-punctuation'           
+                      onChangeText={(val) => {this.setState({mobileNumber: val})}}  
+                    />
                   </View>
                 </View>
-              </View>
 
+                {/* Next Button */}
+                <View style={styles.alignItemCenter}>
+                  {/* Make button gray when not all inputs are filled out, orange when filled out */}
+                  { this.state.lastName == '' || this.state.firstName == '' || this.state.email == '' || this.state.mobileNumber == ''  ?
+                  <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
+                    <Text style={styles.signUpButtonText}>NEXT</Text>
+                  </TouchableOpacity>
+                  :
+                  <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.props.navigation.navigate('SignUp2')}>
+                    <Text style={styles.signUpButtonText}>NEXT</Text>
+                  </TouchableOpacity>
+                  }
+                </View>
+
+                {/* Login */}
+                <View style={styles.alignItemCenter}>
+                  <View style={styles.loginContainer}>
+                    <View style={styles.row}>
+                      <Text style={styles.loginText}>
+                        Already have an account? {" "}
+                      </Text>
+                      <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+                          <Text style={styles.underline}>
+                            Log In
+                          </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+
+              </View>
             </View>
-          </View>
-        </ImageBackground>
-      </View>
+          </ImageBackground>
+        </View>
+      </TouchableWithoutFeedback>
     )
   }
 }

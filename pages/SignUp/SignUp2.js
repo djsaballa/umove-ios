@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 const bgImage = '../../assets/bg-image.png';
 
@@ -15,88 +15,90 @@ export default class SignUp2 extends Component {
 
   render() {
     return(
-      <View style={styles.container}>
-        <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
-          <View style={styles.innerContainer}>
-            <View style={styles.content}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
+          <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
+            <View style={styles.innerContainer}>
+              <View style={styles.content}>
 
-              {/* Logo */}
-              <View style={styles.alignItemCenter}>
-                <Image
-                  source={require('../../assets/logo/logo.png')}
-                  style={styles.logo}
-                />
-              </View>
-
-              {/* Sign Up input */}
-              <View style={styles.alignItemCenter}>
-                <View style={styles.inputPart}> 
-                  <Text style={styles.text}>
-                    Pasword
-                  </Text>
-                  <TextInput
-                    secureTextEntry={true}
-                    style={styles.input}
-                    onChangeText={(val) => {this.setState({password: val})}}  
+                {/* Logo */}
+                <View style={styles.alignItemCenter}>
+                  <Image
+                    source={require('../../assets/logo/logo.png')}
+                    style={styles.logo}
                   />
                 </View>
-                <View style={styles.inputPart}> 
-                  <Text style={styles.text}>
-                    Confirm Password
-                  </Text>
-                  <TextInput
-                    secureTextEntry={true}
-                    style={styles.input}
-                    onChangeText={(val) => {this.setState({confirmPassword: val})}}  
-                  />
-                </View>
-              </View>
 
-              {/* Terms and Conditions & Privacy Policy */}
-              <View style={styles.alignItemCenter}>
-                <View style={styles.conditionsContainer}>
-                  <View style={styles.row}>
-                    <Text style={styles.conditionsText}>
-                      By clicking Continue, you agree to our 
+                {/* Sign Up input */}
+                <View style={styles.alignItemCenter}>
+                  <View style={styles.inputPart}> 
+                    <Text style={styles.text}>
+                      Pasword
                     </Text>
-                      <TouchableOpacity onPress={() => alert('Terms and Conditions')}>
-                        <Text style={styles.underline}>
-                          {" "} Terms and Conditions {" "}
-                        </Text>
-                      </TouchableOpacity>
-                      <Text style={styles.conditionsText}>
-                       and that you have read our 
-                      </Text>
-                      <TouchableOpacity onPress={() => alert('Privacy Policy')}>
-                        <Text style={styles.underline}>
-                          {" "} Privacy Policy
-                        </Text>
-                      </TouchableOpacity>
-                    <Text style={styles.conditionsText}>
-                      .
+                    <TextInput
+                      secureTextEntry={true}
+                      style={styles.input}
+                      onChangeText={(val) => {this.setState({password: val})}}  
+                    />
+                  </View>
+                  <View style={styles.inputPart}> 
+                    <Text style={styles.text}>
+                      Confirm Password
                     </Text>
+                    <TextInput
+                      secureTextEntry={true}
+                      style={styles.input}
+                      onChangeText={(val) => {this.setState({confirmPassword: val})}}  
+                    />
                   </View>
                 </View>
-              </View>
 
-              {/* Continue Button */}
-              <View style={styles.alignItemCenter}>
-                {/* Make button gray when not all inputs are filled out, orange when filled out */}
-                { this.state.password == '' || this.state.confirmPassword == ''  ?
-                <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
-                  <Text style={styles.signUpButtonText}>CONTINUE</Text>
-                </TouchableOpacity>
-                :
-                <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.props.navigation.navigate('SignUp3')}>
-                  <Text style={styles.signUpButtonText}>CONTINUE</Text>
-                </TouchableOpacity>
-                }
-              </View>
+                {/* Terms and Conditions & Privacy Policy */}
+                <View style={styles.alignItemCenter}>
+                  <View style={styles.conditionsContainer}>
+                    <View style={styles.row}>
+                      <Text style={styles.conditionsText}>
+                        By clicking Continue, you agree to our 
+                      </Text>
+                        <TouchableOpacity onPress={() => alert('Terms and Conditions')}>
+                          <Text style={styles.underline}>
+                            {" "} Terms and Conditions {" "}
+                          </Text>
+                        </TouchableOpacity>
+                        <Text style={styles.conditionsText}>
+                        and that you have read our 
+                        </Text>
+                        <TouchableOpacity onPress={() => alert('Privacy Policy')}>
+                          <Text style={styles.underline}>
+                            {" "} Privacy Policy
+                          </Text>
+                        </TouchableOpacity>
+                      <Text style={styles.conditionsText}>
+                        .
+                      </Text>
+                    </View>
+                  </View>
+                </View>
 
+                {/* Continue Button */}
+                <View style={styles.alignItemCenter}>
+                  {/* Make button gray when not all inputs are filled out, orange when filled out */}
+                  { this.state.password == '' || this.state.confirmPassword == ''  ?
+                  <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
+                    <Text style={styles.signUpButtonText}>CONTINUE</Text>
+                  </TouchableOpacity>
+                  :
+                  <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.props.navigation.navigate('SignUp3')}>
+                    <Text style={styles.signUpButtonText}>CONTINUE</Text>
+                  </TouchableOpacity>
+                  }
+                </View>
+
+              </View>
             </View>
-          </View>
-        </ImageBackground>
-      </View>
+          </ImageBackground>
+        </View>
+      </TouchableWithoutFeedback>
     )
   }
 }

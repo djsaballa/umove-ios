@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 const bgImage = '../../assets/bg-image.png';
 
@@ -14,58 +14,60 @@ export default class ForgotPassword extends Component {
 
   render() {
     return(
-      <View style={styles.container}>
-        <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
-          <View style={styles.innerContainer}>
-            <View style={styles.content}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
+          <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
+            <View style={styles.innerContainer}>
+              <View style={styles.content}>
 
-              {/* Logo */}
-              <View style={styles.alignItemCenter}>
-                <Image
-                  source={require('../../assets/logo/logo.png')}
-                  style={styles.logo}
-                />
-              </View>
+                {/* Logo */}
+                <View style={styles.alignItemCenter}>
+                  <Image
+                    source={require('../../assets/logo/logo.png')}
+                    style={styles.logo}
+                  />
+                </View>
 
-              {/* Email Address Input */}
-              <View style={styles.alignItemCenter}>
-                <View style={styles.inputPart}> 
-                  <Text style={styles.label}>
-                    Forgot Your Password?
-                  </Text>
-                  <Text style={styles.text}>
-                    Enter your registered email below to receive password reset instruction
-                  </Text>
-                  <View style={styles.email}>
-                    <Text style={styles.emailText}>
-                      Email Address
+                {/* Email Address Input */}
+                <View style={styles.alignItemCenter}>
+                  <View style={styles.inputPart}> 
+                    <Text style={styles.label}>
+                      Forgot Your Password?
                     </Text>
-                    <TextInput
-                      style={styles.input}
-                      onChangeText={(val) => {this.setState({email: val})}}  
-                    />
+                    <Text style={styles.text}>
+                      Enter your registered email below to receive password reset instruction
+                    </Text>
+                    <View style={styles.email}>
+                      <Text style={styles.emailText}>
+                        Email Address
+                      </Text>
+                      <TextInput
+                        style={styles.input}
+                        onChangeText={(val) => {this.setState({email: val})}}  
+                      />
+                    </View>
                   </View>
                 </View>
-              </View>
 
-              {/* Send Button */}
-              <View style={styles.alignItemCenter}>
-                {/* Make button gray when not all inputs are filled out, orange when filled out */}
-                { this.state.email == ''  ?
-                <TouchableOpacity style={styles.sendButtonGray} disabled={true}>
-                  <Text style={styles.sendButtonText}>SEND</Text>
-                </TouchableOpacity>
-                :
-                <TouchableOpacity style={styles.sendButtonOrange} onPress={() => alert('SENT')}>
-                  <Text style={styles.sendButtonText}>SEND</Text>
-                </TouchableOpacity>
-                }
-              </View>
+                {/* Send Button */}
+                <View style={styles.alignItemCenter}>
+                  {/* Make button gray when not all inputs are filled out, orange when filled out */}
+                  { this.state.email == ''  ?
+                  <TouchableOpacity style={styles.sendButtonGray} disabled={true}>
+                    <Text style={styles.sendButtonText}>SEND</Text>
+                  </TouchableOpacity>
+                  :
+                  <TouchableOpacity style={styles.sendButtonOrange} onPress={() => alert('SENT')}>
+                    <Text style={styles.sendButtonText}>SEND</Text>
+                  </TouchableOpacity>
+                  }
+                </View>
 
+              </View>
             </View>
-          </View>
-        </ImageBackground>
-      </View>
+          </ImageBackground>
+        </View>
+      </TouchableWithoutFeedback>
     )
   }
 }

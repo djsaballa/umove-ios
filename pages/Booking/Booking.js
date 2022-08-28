@@ -1,16 +1,9 @@
 import React, { Component }  from 'react';
 import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity } from 'react-native';
 
-const bgImage = '../assets/bg-image.png';
+const bgImage = '../../assets/bg-image.png';
 
 export default class Booking extends Component {  
-  constructor() {
-    super();
-    
-    this.state = { 
-    };
-  }
-
   render() {
     return(
       <View style={styles.container}>
@@ -26,7 +19,7 @@ export default class Booking extends Component {
                 <TouchableOpacity>
                   <View style={styles.truckSection1}>
                     <Image
-                      source={require('../assets/quick-quotation/exclusive.png')}
+                      source={require('../../assets/truck/exclusive.png')}
                       style={styles.truckImage1}
                     />
                     <Text style={styles.text}>Exclusive</Text>
@@ -34,10 +27,10 @@ export default class Booking extends Component {
                 </TouchableOpacity>
 
                 {/* Shared */}
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => alert('This feature is not yet availble.')}>
                   <View style={styles.truckSection2}>
                     <Image
-                      source={require('../assets/quick-quotation/shared.png')}
+                      source={require('../../assets/truck/shared.png')}
                       style={styles.truckImage2}
                     />
                     <Text style={styles.text}>Shared</Text>

@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ImageBackground, Image, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
 
 // import OTP Input View
 import OTPInputView from '@twotalltotems/react-native-otp-input'
@@ -17,73 +17,75 @@ export default class SignUp3 extends Component {
 
   render() {
     return(
-      <View style={styles.container}>
-        <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
-          <View style={styles.innerContainer}>
-            <View style={styles.content}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
+          <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
+            <View style={styles.innerContainer}>
+              <View style={styles.content}>
 
-              {/* Logo */}
-              <View style={styles.alignItemCenter}>
-                <Image
-                  source={require('../../assets/logo/logo.png')}
-                  style={styles.logo}
-                />
-              </View>
-
-              {/* OTP Verification input */}
-              <View style={styles.alignItemCenter}>
-                <View style={styles.inputPart}> 
-                  <Text style={styles.label}>
-                    OTP Verification
-                  </Text>
-                  <Text style={styles.text}>
-                    Please enter verification code sent to *mobile number*
-                  </Text>
-                  <View>
-                    <OTPInputView 
-                      style={{width: '70%', height: 60}}
-                      pinCount={6} 
-                      codeInputFieldStyle={styles.codeInputFieldStyle}
-                      onCodeFilled={(code) => {this.setState({otpCode: code})}}
-                    />
-                  </View>
+                {/* Logo */}
+                <View style={styles.alignItemCenter}>
+                  <Image
+                    source={require('../../assets/logo/logo.png')}
+                    style={styles.logo}
+                  />
                 </View>
-              </View>
 
-              {/* Resend Code */}
-              <View style={styles.alignItemCenter}>
-                <View style={styles.resendCodeContainer}>
-                  <View style={styles.row}>
-                    <Text style={styles.resendCodeText}>
-                      Didn't receive the verification code? {" "}
+                {/* OTP Verification input */}
+                <View style={styles.alignItemCenter}>
+                  <View style={styles.inputPart}> 
+                    <Text style={styles.label}>
+                      OTP Verification
                     </Text>
-                    <TouchableOpacity onPress={() => alert('Resend OTP')}>
-                        <Text style={styles.underline}>
-                          Resend
-                        </Text>
-                    </TouchableOpacity>
+                    <Text style={styles.text}>
+                      Please enter verification code sent to *mobile number*
+                    </Text>
+                    <View>
+                      <OTPInputView 
+                        style={{width: '70%', height: 60}}
+                        pinCount={6} 
+                        codeInputFieldStyle={styles.codeInputFieldStyle}
+                        onCodeFilled={(code) => {this.setState({otpCode: code})}}
+                      />
+                    </View>
                   </View>
                 </View>
-              </View>
 
-              {/* Verify Button */}
-              <View style={styles.alignItemCenter}>
-                {/* Make button gray when not all inputs are filled out, orange when filled out */}
-                { this.state.otpCode == ''  ?
-                <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
-                  <Text style={styles.signUpButtonText}>VERIFY</Text>
-                </TouchableOpacity>
-                :
-                <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => alert('Verify')}>
-                  <Text style={styles.signUpButtonText}>VERIFY</Text>
-                </TouchableOpacity>
-                }
-              </View>
+                {/* Resend Code */}
+                <View style={styles.alignItemCenter}>
+                  <View style={styles.resendCodeContainer}>
+                    <View style={styles.row}>
+                      <Text style={styles.resendCodeText}>
+                        Didn't receive the verification code? {" "}
+                      </Text>
+                      <TouchableOpacity onPress={() => alert('Resend OTP')}>
+                          <Text style={styles.underline}>
+                            Resend
+                          </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
 
+                {/* Verify Button */}
+                <View style={styles.alignItemCenter}>
+                  {/* Make button gray when not all inputs are filled out, orange when filled out */}
+                  { this.state.otpCode == ''  ?
+                  <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
+                    <Text style={styles.signUpButtonText}>VERIFY</Text>
+                  </TouchableOpacity>
+                  :
+                  <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => alert('Verify')}>
+                    <Text style={styles.signUpButtonText}>VERIFY</Text>
+                  </TouchableOpacity>
+                  }
+                </View>
+
+              </View>
             </View>
-          </View>
-        </ImageBackground>
-      </View>
+          </ImageBackground>
+        </View>
+      </TouchableWithoutFeedback>
     )
   }
 }
