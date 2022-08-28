@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, Dimensions, Toucha
 import Constants from 'expo-constants';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-var width = Dimensions.get('window').width
+var deviceWidth = Dimensions.get('window').width
 
 export default class QuickQuotation1 extends Component {  
   constructor(props) {
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   },
   packagingDropdownContainerStyle: {
     marginLeft: 20,
-    width: width/2.6,
+    width: deviceWidth/2.6,
   },
   addButtonGray: {
     marginTop: '5%',
