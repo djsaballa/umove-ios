@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ImageBackground, Image, Text, TouchableOpacity } from 'react-native';
 
 const bgImage = '../../assets/bg-image.png';
 

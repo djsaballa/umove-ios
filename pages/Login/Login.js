@@ -1,6 +1,10 @@
 import React, { Component }  from 'react';
 import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import Constants from 'expo-constants';
 import { CheckBox } from 'react-native-elements';
+
+import { getStorage, setStorage } from '../../api/helper/storage';
+import { AuthenticationApi } from '../../api/authentication'; 
 
 const bgImage = '../../assets/bg-image.png';
 
@@ -9,10 +13,47 @@ export default class Login extends Component {
     super();
     
     this.state = { 
-      email: '',
-      password: '', 
-      checkbox: false
+      username: 'customer2',
+      password: 'mySecuredPassword', 
+      checkbox: false,
+      error: false,
+      verifyOTP: [],
+      data: []
     };
+
+    //this.init()
+  }
+
+  // async init() {
+  //   let user = await getStorage('user');
+  //   if(user) {
+  //     this.props.navigation.navigate('Start');
+  //   }
+  // }
+
+  async logIn() {
+    this.setState({ error: false });
+    let [res, err] = await AuthenticationApi.login(this.state.username, this.state.password);
+    if(err) {
+      console.log(err)
+      this.setState({ error: true });
+    }
+    if(res) {
+      this.setState({verifyOTP: res}, async () => {
+        let verifyOTP = this.state.verifyOTP;
+        let [response, error] = await AuthenticationApi.verifyOTP(verifyOTP.username, verifyOTP.otp);
+        if(error) {
+          console.log(error)
+          this.setState({ error: true });
+        }
+        if(response) {
+          let data = response;
+          await setStorage('user', data)
+
+          this.props.navigation.navigate('Dashboard');
+        }
+      });
+    }
   }
 
   render() {
@@ -21,6 +62,9 @@ export default class Login extends Component {
         <View style={styles.container}>
           <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.bgImage}>
             <View style={styles.innerContainer}>
+
+            {this.state.error ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> Username or Password is incorrect </Text></View> : null}
+
               <View style={styles.content}>
 
                 {/* Logo */}
@@ -31,15 +75,15 @@ export default class Login extends Component {
                   />
                 </View>
 
-                {/* Email and Password */}
+                {/* username and Password */}
                 <View style={styles.alignItemCenter}>
                   <View style={styles.inputPart}> 
                     <Text style={styles.text}>
-                      Email Address
+                      Username
                     </Text>
                     <TextInput
                       style={styles.input}
-                      onChangeText={(val) => {this.setState({email: val})}}  
+                      onChangeText={(val) => {this.setState({username: val})}}  
                     />
                   </View>
                   <View style={styles.inputPart}> 
@@ -73,12 +117,12 @@ export default class Login extends Component {
                 {/* Login Button */}
                 <View style={styles.alignItemCenter}>
                   {/* Make button gray when not all inputs are filled out, orange when filled out */}
-                  { this.state.email == '' || this.state.password == '' ?
+                  { this.state.username == '' || this.state.password == '' ?
                   <TouchableOpacity style={styles.loginButtonGray} disabled={true}>
                     <Text style={styles.loginButtonText}>LOG IN</Text>
                   </TouchableOpacity>
                   :
-                  <TouchableOpacity style={styles.loginButtonOrange} onPress={() => alert('Logged In')}>
+                  <TouchableOpacity style={styles.loginButtonOrange} onPress={() => { this.logIn() }}>
                     <Text style={styles.loginButtonText}>LOG IN</Text>
                   </TouchableOpacity>
                   }
@@ -249,5 +293,15 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
     textDecorationLine: 'underline',
+  },
+  errorContainer:{
+    width: '100%',
+    backgroundColor: '#ffcdd2',
+    marginTop: Constants.statusBarHeight
+  },
+  errorMessage:{
+    textAlign: 'center',
+    padding: 10,
+    color: '#d32f2f'
   }
 })
