@@ -106,7 +106,7 @@ export default class QuickQuotation1 extends Component {
                   style={styles.widthLengthWeightInput}
                   onChangeText={(width) => {this.setState({width})}}
                   placeholder="00.00 mm"
-                  placeholderTextColor={styles.placeholderStyle}
+                  placeholderTextColor={'#C3C3C3'}
                   keyboardType='decimal-pad'
                   returnKeyType='done'
                 />
@@ -122,7 +122,7 @@ export default class QuickQuotation1 extends Component {
                     style={styles.widthLengthWeightInput}
                     onChangeText={(length) => {this.setState({length})}}
                     placeholder="00.00 mm"
-                    placeholderTextColor={styles.placeholderStyle}
+                    placeholderTextColor={'#C3C3C3'}
                     keyboardType='decimal-pad'
                     returnKeyType='done'
                   />
@@ -141,7 +141,7 @@ export default class QuickQuotation1 extends Component {
                     style={styles.widthLengthWeightInput}
                     onChangeText={(weight) => {this.setState({weight})}}
                     placeholder="00.00 kg"
-                    placeholderTextColor={styles.placeholderStyle}
+                    placeholderTextColor={'#C3C3C3'}
                     keyboardType='decimal-pad'
                     returnKeyType='done'
                   />

@@ -116,13 +116,13 @@ export default class QuickQuotation2 extends Component {
               style={styles.dateInput}
               onChangeText={(date) => {this.setState({date})}}
               placeholder='March 22, 2022'
-              placeholderTextColor={styles.placeholderTextColor}
+              placeholderTextColor={'#C3C3C3'}
             />
             <TextInput
               style={styles.timeInput}
               onChangeText={(time) => {this.setState({time})}}
               placeholder='ASAP'
-              placeholderTextColor={styles.placeholderTextColor}
+              placeholderTextColor={'#C3C3C3'}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -131,21 +131,21 @@ export default class QuickQuotation2 extends Component {
               style={[styles.fullWidthInput, styles.marginTop]}
               onChangeText={(contactPerson) => {this.setState({contactPerson})}}
               placeholder='Contact Person'
-              placeholderTextColor={styles.placeholderTextColor}
+              placeholderTextColor={'#C3C3C3'}
             />
             {/* Mobile Number */}
             <TextInput
               style={[styles.fullWidthInput, styles.marginTop]}
               onChangeText={(mobileNumber) => {this.setState({mobileNumber})}}
               placeholder='Mobile Number'
-              placeholderTextColor={styles.placeholderTextColor}
+              placeholderTextColor={'#C3C3C3'}
             />
             {/* Street Address */}
             <TextInput
               style={[styles.fullWidthInput, styles.marginTop]}
               onChangeText={(streetAddress) => {this.setState({streetAddress})}}
               placeholder='Street Address'
-              placeholderTextColor={styles.placeholderTextColor}
+              placeholderTextColor={'#C3C3C3'}
             />
           </View>
           {/* Barangay and City */}
@@ -210,7 +210,7 @@ export default class QuickQuotation2 extends Component {
                 style={[styles.zipInput]}
                 onChangeText={(zipcode) => {this.setState({zipcode})}}
                 placeholder='ZIP Code'
-                placeholderTextColor={styles.placeholderTextColor}
+                placeholderTextColor={'#C3C3C3'}
                 keyboardType='number-pad'
                 returnKeyType='done'
               />
@@ -221,14 +221,14 @@ export default class QuickQuotation2 extends Component {
               style={[styles.fullWidthInput, styles.marginTop]}
               onChangeText={(landmark) => {this.setState({landmark})}}
               placeholder='Landmarks (Optional)'
-              placeholderTextColor={styles.placeholderTextColor}
+              placeholderTextColor={'#C3C3C3'}
             />
           </View>
 
           <View style={styles.alignItemCenter}>
           {/* Next Button */}
             {/* Make button gray when not all inputs are filled out, orange when filled out */}
-            { this.state.typeValue == '' || this.state.quantity == 0 || this.state.width == '' || this.state.length == '' || this.state.weight == '' || this.state.packagingValue == '' ?
+            { this.state.date == '' || this.state.time == '' || this.state.contactPerson == '' || this.state.mobileNumber == '' || this.state.streetAddress == '' || this.state.barangay == '' || this.state.city == '' || this.state.province == '' || this.state.zipcode == '' || this.state.landmark == '' ?
             <TouchableOpacity style={styles.nextButtonGray} disabled={true}>
               <Text style={styles.buttonText}> NEXT </Text>
             </TouchableOpacity>
@@ -323,9 +323,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     textAlign: 'center',
     marginLeft: '3%'
-  },
-  placeholderTextColor: {
-    color: "#C3C3C3"
   },
   barangayInput: {
     width: '43%',

@@ -24,6 +24,8 @@
     "react-native": "0.68.2",
     "react-native-dropdown-picker": "^5.4.2",
     "react-native-elements": "^3.4.2",
+    "react-native-event-listeners": "^1.0.7",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-maps": "0.30.2",
     "react-native-modal-selector-searchable": "^2.1.4",
     "react-native-otp-forminput": "^1.0.0",

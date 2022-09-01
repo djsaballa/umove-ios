@@ -1,5 +1,7 @@
 import React, { Component }  from 'react';
-import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
+
+import { getStorage, setStorage } from '../../api/helper/storage';
 
 const bgImage = '../../assets/bg-image.png';
 
@@ -8,105 +10,129 @@ export default class SignUp1 extends Component {
     super();
     
     this.state = { 
-      lastName: '',
-      firstName: '', 
-      email: '',
-      mobileNumber: ''
+      customerType: 'individual',
+      firstName: '1', 
+      middleName: '1',
+      lastName: '1',
+      username: '1',
+      email: '1',
+      mobileNumber: '1',
     };
   }
 
   render() {
     return(
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.container}>
-          <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
-            <View style={styles.innerContainer}>
-              <View style={styles.content}>
+      <View style={styles.container}>
+        <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
+          <View style={styles.innerContainer}>
+            <View style={styles.content}>
 
-                {/* Logo */}
-                <View style={styles.alignItemCenter}>
-                  <Image
-                    source={require('../../assets/logo/logo.png')}
-                    style={styles.logo}
-                  />
-                </View>
-
-                {/* Sign Up input */}
-                <View style={styles.alignItemCenter}>
-                <View style={styles.inputPart}> 
-                    <Text style={styles.text}>
-                      Last Name
-                    </Text>
-                    <TextInput
-                      style={styles.input}
-                      onChangeText={(val) => {this.setState({lastName: val})}}  
+              <KeyboardAvoidingView behavior='padding'>
+                <ScrollView>
+                  {/* Logo */}
+                  <View style={styles.alignItemCenter}>
+                    <Image
+                      source={require('../../assets/logo/logo.png')}
+                      style={styles.logo}
                     />
                   </View>
-                  <View style={styles.inputPart}> 
-                    <Text style={styles.text}>
-                      First Name
-                    </Text>
-                    <TextInput
-                      style={styles.input}
-                      onChangeText={(val) => {this.setState({firstName: val})}}  
-                    />
-                  </View>
-                  <View style={styles.inputPart}> 
-                    <Text style={styles.text}>
-                      Email Address
-                    </Text>
-                    <TextInput
-                      style={styles.input}
-                      onChangeText={(val) => {this.setState({email: val})}}  
-                    />
-                  </View>
-                  <View style={styles.inputPart}> 
-                    <Text style={styles.text}>
-                      Mobile Number
-                    </Text>
-                    <TextInput
-                      style={styles.input}
-                      keyboardType='numbers-and-punctuation'           
-                      onChangeText={(val) => {this.setState({mobileNumber: val})}}  
-                    />
-                  </View>
-                </View>
 
-                {/* Next Button */}
-                <View style={styles.alignItemCenter}>
-                  {/* Make button gray when not all inputs are filled out, orange when filled out */}
-                  { this.state.lastName == '' || this.state.firstName == '' || this.state.email == '' || this.state.mobileNumber == ''  ?
-                  <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
-                    <Text style={styles.signUpButtonText}>NEXT</Text>
-                  </TouchableOpacity>
-                  :
-                  <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.props.navigation.navigate('SignUp2')}>
-                    <Text style={styles.signUpButtonText}>NEXT</Text>
-                  </TouchableOpacity>
-                  }
-                </View>
-
-                {/* Login */}
-                <View style={styles.alignItemCenter}>
-                  <View style={styles.loginContainer}>
-                    <View style={styles.row}>
-                      <Text style={styles.loginText}>
-                        Already have an account? {" "}
+                  {/* Sign Up input */}
+                  <View style={styles.alignItemCenter}>
+                    <View style={styles.inputPart}> 
+                      <Text style={styles.text}>
+                        First Name
                       </Text>
-                      <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
-                          <Text style={styles.underline}>
-                            Log In
-                          </Text>
-                      </TouchableOpacity>
+                      <TextInput
+                        style={styles.input}
+                        onChangeText={(val) => {this.setState({firstName: val})}}  
+                      />
+                    </View>
+                    <View style={styles.inputPart}> 
+                      <Text style={styles.text}>
+                        Middle Name
+                      </Text>
+                      <TextInput
+                        style={styles.input}
+                        onChangeText={(val) => {this.setState({middleName: val})}}  
+                      />
+                    </View>
+                    <View style={styles.inputPart}> 
+                      <Text style={styles.text}>
+                        Last Name
+                      </Text>
+                      <TextInput
+                        style={styles.input}
+                        onChangeText={(val) => {this.setState({lastName: val})}}  
+                      />
+                    </View>
+                    <View style={styles.inputPart}> 
+                      <Text style={styles.text}>
+                        Username
+                      </Text>
+                      <TextInput
+                        style={styles.input}
+                        onChangeText={(val) => {this.setState({firstName: val})}}  
+                      />
+                    </View>
+                    <View style={styles.inputPart}> 
+                      <Text style={styles.text}>
+                        Email Address
+                      </Text>
+                      <TextInput
+                        style={styles.input}
+                        keyboardType='email-address'
+                        onChangeText={(val) => {this.setState({email: val})}}
+                      />
+                    </View>
+                    <View style={styles.inputPart}> 
+                      <Text style={styles.text}>
+                        Mobile Number
+                      </Text>
+                      <TextInput
+                        style={styles.input}
+                        keyboardType='numbers-and-punctuation'           
+                        onChangeText={(val) => {this.setState({mobileNumber: val})}}  
+                      />
                     </View>
                   </View>
-                </View>
 
-              </View>
+                  {/* Next Button */}
+                  <View style={styles.alignItemCenter}>
+                    {/* Make button gray when not all inputs are filled out, orange when filled out */}
+                    { this.state.firstName == '' || this.state.middleName == '' || this.state.lastName == '' || this.state.username == '' || this.state.email == '' || this.state.mobileNumber == ''  ?
+                    <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
+                      <Text style={styles.signUpButtonText}>NEXT</Text>
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.props.navigation.navigate('SignUp2')}>
+                      <Text style={styles.signUpButtonText}>NEXT</Text>
+                    </TouchableOpacity>
+                    }
+                  </View>
+
+                  {/* Login */}
+                  <View style={styles.alignItemCenter}>
+                    <View style={styles.loginContainer}>
+                      <View style={styles.row}>
+                        <Text style={styles.loginText}>
+                          Already have an account? {" "}
+                        </Text>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+                            <Text style={styles.underline}>
+                              Log In
+                            </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                </ScrollView>
+              </KeyboardAvoidingView>
+
             </View>
-          </ImageBackground>
-        </View>
-      </TouchableWithoutFeedback>
+          </View>
+        </ImageBackground>
+      </View>
     )
   }
 }
@@ -135,7 +161,7 @@ const styles = StyleSheet.create({
   logo: {
     height: 50,
     width: 240,
-    marginBottom: '15%',
+    marginBottom: '10%',
   },
   inputPart: {
     margin: 5,
@@ -159,7 +185,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   signUpButtonGray: {
-    marginTop: '20%',
+    marginTop: '10%',
     height: 50,
     width: '70%',
     borderRadius: 25,
@@ -172,7 +198,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   signUpButtonOrange: {
-    marginTop: '20%',
+    marginTop: '10%',
     height: 50,
     width: '70%',
     borderRadius: 25,
@@ -199,11 +225,11 @@ const styles = StyleSheet.create({
   },
   loginText: {
     color: 'white',
-    fontSize: 12,
+    fontSize: 14,
   },
   underline: {
     color: 'white',
-    fontSize: 12,
+    fontSize: 14,
     textDecorationLine: 'underline',
   }
 })

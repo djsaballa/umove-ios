@@ -1,10 +1,11 @@
 import React, { Component }  from 'react';
 import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Constants from 'expo-constants';
+import { EventRegister } from 'react-native-event-listeners'
 import { CheckBox } from 'react-native-elements';
 
-import { getStorage, setStorage } from '../../api/helper/storage';
 import { AuthenticationApi } from '../../api/authentication'; 
+import { getStorage, setStorage } from '../../api/helper/storage';
 
 const bgImage = '../../assets/bg-image.png';
 
@@ -13,46 +14,74 @@ export default class Login extends Component {
     super();
     
     this.state = { 
-      username: 'customer2',
-      password: 'mySecuredPassword', 
-      checkbox: false,
+      username: '',
+      password: '', 
+      remember: false,
       error: false,
-      verifyOTP: [],
       data: []
     };
 
-    //this.init()
   }
 
-  // async init() {
-  //   let user = await getStorage('user');
-  //   if(user) {
-  //     this.props.navigation.navigate('Start');
-  //   }
-  // }
+  async componentDidMount() {
+    this.init();
+    this.loggedOut();
+  }
+
+  componentWillUnmount() {
+    EventRegister.removeEventListener(this.listener)
+  }
+
+  async componentDidUpdate() {
+    if(this.state.remember || !this.state.remember) {
+      await setStorage('remember', JSON.stringify(this.state.remember));
+    }
+  }
+  
+  async init() {
+    let remember = await getStorage('remember');
+    if(remember) {
+      this.setState({remember});
+      let loginInfo = await getStorage('loginInfo');
+      if(loginInfo) {
+        this.setState({username: loginInfo[0]})
+        this.setState({password: loginInfo[1]})
+        let [res, err] = await AuthenticationApi.login(loginInfo[0], loginInfo[1]);
+        if(err) {
+          this.setState({ error: true });
+        }
+        if(res) {
+          await setStorage('user', res)
+          this.props.navigation.navigate('Dashboard');
+        }
+      }
+    } else {
+      await setStorage('loginInfo', null)
+    }
+  }
+
+  async loggedOut() {
+    if (!this.listener) {
+      this.listener = EventRegister.addEventListener('logout', (data) => {
+        this.setState({username: ''})
+        this.setState({password: ''})
+        this.setState({remember: false})
+      });
+    }
+  }
 
   async logIn() {
     this.setState({ error: false });
+    let loginInfo = [this.state.username, this.state.password]
+    await setStorage('loginInfo', loginInfo)
+    
     let [res, err] = await AuthenticationApi.login(this.state.username, this.state.password);
     if(err) {
-      console.log(err)
       this.setState({ error: true });
     }
     if(res) {
-      this.setState({verifyOTP: res}, async () => {
-        let verifyOTP = this.state.verifyOTP;
-        let [response, error] = await AuthenticationApi.verifyOTP(verifyOTP.username, verifyOTP.otp);
-        if(error) {
-          console.log(error)
-          this.setState({ error: true });
-        }
-        if(response) {
-          let data = response;
-          await setStorage('user', data)
-
-          this.props.navigation.navigate('Dashboard');
-        }
-      });
+      await setStorage('user', res)
+      this.props.navigation.navigate('Dashboard');
     }
   }
 
@@ -83,6 +112,7 @@ export default class Login extends Component {
                     </Text>
                     <TextInput
                       style={styles.input}
+                      value={this.state.username}
                       onChangeText={(val) => {this.setState({username: val})}}  
                     />
                   </View>
@@ -93,6 +123,7 @@ export default class Login extends Component {
                     <TextInput
                       style={styles.input}
                       secureTextEntry={true}
+                      value={this.state.password}
                       onChangeText={(val) => {this.setState({password: val})}}  
                     />
                   </View>
@@ -104,8 +135,8 @@ export default class Login extends Component {
                       checkedColor='green'
                       containerStyle={{ backgroundColor: 'undefined', borderWidth:'0', padding:0, margin:0 }}
                       textStyle={{ color:'white', fontSize:12, fontWeight:'normal' }}
-                      checked={this.state.checkbox}
-                      onPress={() => {this.setState({checkbox: !this.state.checkbox})}}
+                      checked={this.state.remember}
+                      onPress={() => {this.setState({remember: !this.state.remember})}}
                       style={styles.checkbox}
                     />
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('ForgotPassword')}>
@@ -287,11 +318,11 @@ const styles = StyleSheet.create({
   },
   signUpText: {
     color: 'white',
-    fontSize: 12,
+    fontSize: 14,
   },
   underline: {
     color: 'white',
-    fontSize: 12,
+    fontSize: 14,
     textDecorationLine: 'underline',
   },
   errorContainer:{

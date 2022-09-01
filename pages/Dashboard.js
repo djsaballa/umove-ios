@@ -1,8 +1,9 @@
 import React, { Component }  from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image } from 'react-native';
+import { EventRegister } from 'react-native-event-listeners'
 
-import { getStorage, setStorage } from '../api/helper/storage';
 import { AuthenticationApi } from '../api/authentication'; 
+import { getStorage, setStorage } from '../api/helper/storage';
 
 const bgImage = '../assets/bg-image.png';
 
@@ -14,11 +15,21 @@ export default class QuickQuotation4 extends Component {
       user: []
     };
   }
+
+  async componentDidMount() {
+    this.init();
+  }
   
+  async init() {
+    let user = await getStorage('user');
+    this.setState({user})
+  }
+
   async logOut() {
-    await AuthenticationApi.logout();
-    await setStorage('user', null);
+    let user = await getStorage('user');
+    await AuthenticationApi.logout(user.refresh);
     this.props.navigation.navigate('Login');
+    EventRegister.emit('logout', true);
   }
 
   render() {
