@@ -26,7 +26,7 @@ export default class App extends Component{
     // put pages in the Stack for the Navigation
     <NavigationContainer>
         <StatusBar style="light" />
-        <Stack.Navigator initialRouteName="SignUp1" screenOptions={{headerShown: false}}>
+        <Stack.Navigator initialRouteName="Start" screenOptions={{headerShown: false}}>
           <Stack.Screen name="Start" component={Start} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
@@ -39,7 +39,7 @@ export default class App extends Component{
           <Stack.Screen name="QuickQuotation3" component={QuickQuotation3} />
           <Stack.Screen name="QuickQuotation4" component={QuickQuotation4} />
           <Stack.Screen name="Booking" component={Booking} />
-          <Stack.Screen name="Dashboard" component={Dashboard} />
+          <Stack.Screen name="Dashboard" component={Dashboard} options={{gestureEnabled: false}}/>
         </Stack.Navigator>
       </NavigationContainer>
     )

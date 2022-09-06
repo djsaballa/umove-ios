@@ -1,9 +1,72 @@
 import React, { Component }  from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image } from 'react-native';
+import { EventRegister } from 'react-native-event-listeners'
+
+import { AuthenticationApi } from '../api/authentication'; 
+import { getStorage, setStorage } from '../api/helper/storage';
 
 const bgImage = '../assets/bg-image.png';
 
 export default class Start extends Component {  
+  constructor() {
+    super();
+    
+    this.state = { 
+      username: '',
+      password: '', 
+      remember: false,
+      error: false,
+      data: []
+    };
+  }
+
+  async componentDidMount() {
+    this.init();
+    this.loggedOut();
+  }
+
+  componentWillUnmount() {
+    EventRegister.removeEventListener(this.listener)
+  }
+
+  async componentDidUpdate() {
+    if(this.state.remember || !this.state.remember) {
+      await setStorage('remember', JSON.stringify(this.state.remember));
+    }
+  }
+  
+  async init() {
+    let remember = await getStorage('remember');
+    if(remember) {
+      this.setState({remember});
+      let loginInfo = await getStorage('loginInfo');
+      if(loginInfo) {
+        this.setState({username: loginInfo[0]})
+        this.setState({password: loginInfo[1]})
+        let [res, err] = await AuthenticationApi.login(loginInfo[0], loginInfo[1]);
+        if(err) {
+          this.setState({ error: true });
+        }
+        if(res) {
+          await setStorage('user', res)
+          this.props.navigation.navigate('Dashboard');
+        }
+      }
+    } else {
+      await setStorage('loginInfo', null)
+    }
+  }
+
+  async loggedOut() {
+    if (!this.listener) {
+      this.listener = EventRegister.addEventListener('logout', (data) => {
+        this.setState({username: ''})
+        this.setState({password: ''})
+        this.setState({remember: false})
+      });
+    }
+  }
+
   render() {
     return(
       <View style={styles.container}>

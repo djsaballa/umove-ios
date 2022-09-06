@@ -231,9 +231,6 @@ const styles = StyleSheet.create({
   marginBottom: {
     marginBottom: '65%'
   },
-  placeholderStyle: {
-    color: "#C3C3C3"
-  },
   typeDropdownStyle: {
     paddingLeft: 20,
     borderRadius: 25,

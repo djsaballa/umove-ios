@@ -1,5 +1,10 @@
 import React, { Component }  from 'react';
 import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import Constants from 'expo-constants';
+
+import { RegistrationApi } from '../../api/registration';
+import { AuthenticationApi } from '../../api/authentication'; 
+import { getStorage, setStorage } from '../../api/helper/storage';
 
 const bgImage = '../../assets/bg-image.png';
 
@@ -8,17 +13,85 @@ export default class SignUp3 extends Component {
     super();
     
     this.state = { 
-      password: '',
-      confirmPassword: '', 
+      register: {
+        customerType: 'individual',
+        firstName: '', 
+        middleName: '',
+        lastName: '',
+        username: '',
+        email: '',
+        mobileNumber: '',
+        streetAddress: '',
+        region: '',
+        province: '',
+        city: '',
+        barangay: '',
+        zipcode: '',
+        password: '',
+        confirmPassword: '', 
+      }, 
+      error1: false,
+      error2: false,
+      error3: false,
+      message: []
     };
   }
 
+  async componentDidMount() {
+    this.init();
+  }
+
+  async init() {
+    let register = await getStorage('register')
+    this.setState({register})
+  }
+
+  async signUp() {
+    let register = this.state.register
+    await setStorage('register', register)
+    let res = await RegistrationApi.individual()
+    this.setState({message: res}, async () => {
+      let response = this.state.message;
+      if(register.password.length < 8) {
+        this.setState({error1: true})
+      } else if(register.password !== register.confirmPassword) {
+        this.setState({error1: false})
+        this.setState({error2: true})
+      } else if(response.message.password) {
+        this.setState({error1: false})
+        this.setState({error2: false})
+        this.setState({error3: true})
+      } else {
+        this.setState({error1: false})
+        this.setState({error2: false})
+        this.setState({error3: false})
+
+        let loginInfo = [register.username, register.password]
+        await setStorage('remember', 'true')
+        await setStorage('loginInfo', loginInfo)
+
+        let [r, e] = await AuthenticationApi.login(loginInfo[0], loginInfo[1]);
+        if(r) {
+          await setStorage('user', r)
+          this.props.navigation.navigate('Dashboard');
+        }
+      }
+    })
+  } 
+
   render() {
+    let register = this.state.register;
+    let response = this.state.message;
     return(
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
-          <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
-            <View style={styles.innerContainer}>
+          <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}> 
+            <View style={styles.innerContainer}> 
+
+            {this.state.error1 ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> This password is too short. It must contain at least 8 characters. </Text></View> : null}
+            {this.state.error2 ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> Password and Confirm Password do not match, try again.  </Text></View> : null}
+            {this.state.error3 ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> {response.message.password[0]}  </Text></View> : null}
+
               <View style={styles.content}>
 
                 {/* Logo */}
@@ -33,12 +106,15 @@ export default class SignUp3 extends Component {
                 <View style={styles.alignItemCenter}>
                   <View style={styles.inputPart}> 
                     <Text style={styles.text}>
-                      Pasword
+                      Password
                     </Text>
                     <TextInput
                       secureTextEntry={true}
                       style={styles.input}
-                      onChangeText={(val) => {this.setState({password: val})}}  
+                      onChangeText={(val) => {
+                        register.password = val;
+                        this.setState({register})
+                      }}  
                     />
                   </View>
                   <View style={styles.inputPart}> 
@@ -48,7 +124,10 @@ export default class SignUp3 extends Component {
                     <TextInput
                       secureTextEntry={true}
                       style={styles.input}
-                      onChangeText={(val) => {this.setState({confirmPassword: val})}}  
+                      onChangeText={(val) => {
+                        register.confirmPassword = val;
+                        this.setState({register})
+                      }}   
                     />
                   </View>
                 </View>
@@ -83,12 +162,12 @@ export default class SignUp3 extends Component {
                 {/* Continue Button */}
                 <View style={styles.alignItemCenter}>
                   {/* Make button gray when not all inputs are filled out, orange when filled out */}
-                  { this.state.password == '' || this.state.confirmPassword == ''  ?
+                  { register.password == '' || register.confirmPassword == ''  ?
                   <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
                     <Text style={styles.signUpButtonText}>CONTINUE</Text>
                   </TouchableOpacity>
                   :
-                  <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.props.navigation.navigate('SignUp4')}>
+                  <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.signUp()}>
                     <Text style={styles.signUpButtonText}>CONTINUE</Text>
                   </TouchableOpacity>
                   }
@@ -201,4 +280,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight:'bold'
   },
+  errorContainer:{
+    width: '100%',
+    backgroundColor: '#ffcdd2',
+    marginTop: Constants.statusBarHeight
+  },
+  errorMessage:{
+    textAlign: 'center',
+    padding: 10,
+    color: '#d32f2f'
+  }
 })

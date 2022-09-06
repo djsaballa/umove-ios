@@ -1,6 +1,7 @@
 import React, { Component }  from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners'
+import Constants from 'expo-constants';
 
 import { AuthenticationApi } from '../api/authentication'; 
 import { getStorage, setStorage } from '../api/helper/storage';
@@ -12,6 +13,7 @@ export default class QuickQuotation4 extends Component {
     super();
     
     this.state = { 
+      balance: '00.00',
       user: []
     };
   }
@@ -37,25 +39,52 @@ export default class QuickQuotation4 extends Component {
       <View style={styles.container}>
         <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
           <View style={styles.innerContainer}>
-            <View style={styles.content}>
-
-              {/* Logo */}
-              <View style={styles.alignItemCenter}>
+            <View style={styles.header}>
+              <View style={styles.headerSpacing}>
                 <Image
                   source={require('../assets/logo/logo.png')}
                   style={styles.logo}
                 />
+                {/* Button */}
+                <TouchableOpacity style={styles.logOutButton} onPress={() => this.logOut() }>
+                  <Text style={styles.buttonText}>Log Out</Text>
+                </TouchableOpacity>
               </View>
-
-              {/* Buttons */}
-              <View style={styles.alignItemCenter}>
-                <View style={styles.row}>
-                  <TouchableOpacity style={styles.loginButton} onPress={() => this.logOut() }>
-                    <Text style={styles.buttonText}>Log Out</Text>
-                  </TouchableOpacity>
+            </View>
+            <View style={styles.content}>
+              <View style={styles.flexEnd}>
+                <View style={styles.balance}>
+                  <View style={styles.balanceContainer}>
+                    <Text style={styles.balanceText}>
+                      Balance
+                    </Text>
+                  </View>
+                  <View style={styles.moneyContainer}>
+                    <View style={styles.symbol}>
+                      <Text style={styles.moneyText}>
+                        ₱ 
+                      </Text>
+                    </View>
+                    <View style={styles.value}>
+                      <Text style={styles.moneyText}>
+                        {this.state.balance}
+                      </Text>
+                    </View>
+                  </View>
+                </View> 
+              </View>
+              <View style={styles.textContatiner}>
+                <View style={styles.bigTextContainer}>
+                  <Text style={styles.bigText}>
+                    Send anything fast.
+                  </Text>
+                </View>
+                <View style={styles.smallTextContainer}>
+                  <Text style={styles.smallText}>
+                    There is no transfer, leading to the destination, real-time monitoring, first compensation guarantee and peace of mind.
+                  </Text>
                 </View>
               </View>
-
             </View>
           </View>
         </ImageBackground>
@@ -63,7 +92,6 @@ export default class QuickQuotation4 extends Component {
     )
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -78,64 +106,100 @@ const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
   },
+  header: {
+    width: '100%',
+    paddingTop: Constants.statusBarHeight,
+    backgroundColor: 'rgb(29, 32, 39)', 
+    shadowColor: '#171717',
+    shadowOffset: {height: 5},
+    shadowOpacity: 0.3,
+  },
+  headerSpacing: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  logo: {
+    height: 20,
+    width: 100,
+    marginTop: '2%',
+    marginBottom: '3%',
+  },
+  logOutButton: {
+    height: 28,
+    width: '17%',
+    borderRadius: 10,
+    justifyContent:'center',
+    alignItems: 'center',
+    backgroundColor: 'rgb(223,131,68)',
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 6},
+    shadowOpacity: 0.9,
+    shadowRadius: 3,
+    marginLeft: '19%',
+    marginRight: '2%',
+    marginBottom: '1%',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 13,
+    fontWeight:'bold'
+  },
   content: {
     flex: 1,
-    justifyContent: 'center',
+    
   },
   alignItemCenter: {
     alignItems: 'center',
   },
-  logo: {
-    height: 50,
-    width: 240,
-    marginBottom: '15%',
+  flexEnd: {
+    alignItems: 'flex-end',
+  }, 
+  balance: {
+    width: '60%',
+    height: 100,
+    marginTop: '25%',
+    marginRight: '10%',
+    marginBottom: '20%',
+    justifyContent: 'space-evenly',
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    borderRadius: 15
   },
-  row: {
-    marginTop: '15%',
+  balanceContainer: {
+    alignItems: 'center'
+  },
+  moneyContainer: {
     flexDirection: 'row',
-    alignItems: 'center',    
+    justifyContent: 'space-evenly',
   },
-  quickQuotationButton: {
-    marginTop: '35%',
-    height: 50,
-    width: '55%',
-    borderRadius: 10,
-    justifyContent:'center',
-    alignItems: 'center',
-    backgroundColor: 'rgb(223,131,68)',
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 6},
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
-  },
-  loginButton: {
-    height: 50,
-    width: '35%',
-    borderRadius: 10,
-    justifyContent:'center',
-    alignItems: 'center',
-    backgroundColor: 'rgb(223,131,68)',
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 6},
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
-  },
-  signupButton: {
-    marginLeft: '8%',
-    height: 50,
-    width: '35%',
-    borderRadius: 10,
-    justifyContent:'center',
-    alignItems: 'center',
-    backgroundColor: 'rgb(223,131,68)',
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 6},
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
-  },
-  buttonText: {
+  balanceText: {
     color: 'white',
     fontSize: 20,
-    fontWeight:'bold'
+    fontWeight: '300'
   },
+  moneyText: {
+    color: 'white',
+    fontSize: 30,
+    fontWeight: '100'
+  },
+  textContatiner: {
+    marginLeft: '10%',
+  },
+  bigTextContainer: {
+    width: '35%'
+  },
+  bigText: {
+    color: 'white',
+    fontSize: 35,
+    fontWeight: '100',
+    lineHeight: 50
+  },
+  smallTextContainer: {
+    width: '55%'
+  },
+  smallText: {
+    color: 'white',
+    fontSize: 15,
+    fontWeight: '100'
+  }
 })

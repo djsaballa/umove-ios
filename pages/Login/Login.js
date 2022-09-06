@@ -18,9 +18,7 @@ export default class Login extends Component {
       password: '', 
       remember: false,
       error: false,
-      data: []
     };
-
   }
 
   async componentDidMount() {
@@ -58,18 +56,8 @@ export default class Login extends Component {
     } else {
       await setStorage('loginInfo', null)
     }
+  
   }
-
-  async loggedOut() {
-    if (!this.listener) {
-      this.listener = EventRegister.addEventListener('logout', (data) => {
-        this.setState({username: ''})
-        this.setState({password: ''})
-        this.setState({remember: false})
-      });
-    }
-  }
-
   async logIn() {
     this.setState({ error: false });
     let loginInfo = [this.state.username, this.state.password]
@@ -82,6 +70,16 @@ export default class Login extends Component {
     if(res) {
       await setStorage('user', res)
       this.props.navigation.navigate('Dashboard');
+    }
+  }
+
+  async loggedOut() {
+    if (!this.listener) {
+      this.listener = EventRegister.addEventListener('logout', () => {
+        this.setState({username: ''})
+        this.setState({password: ''})
+        this.setState({remember: false})
+      });
     }
   }
 
@@ -165,19 +163,19 @@ export default class Login extends Component {
                   <View style={styles.row}>
                     <TouchableOpacity onPress={() => alert('Login w/ google')}>
                       <Image
-                        source={require('../../assets/icon/google.png')}
+                        source={require('../../assets/socials/google.png')}
                         style={styles.socials}
                       />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => alert('Login w/ facebook')}>
                       <Image
-                        source={require('../../assets/icon/facebook.png')}
+                        source={require('../../assets/socials/facebook.png')}
                         style={styles.socials}
                       />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => alert('Login w/ fingerprint')}>  
                       <Image
-                        source={require('../../assets/icon/fingerprint.png')}
+                        source={require('../../assets/socials/fingerprint.png')}
                         style={styles.socials}
                       />
                     </TouchableOpacity>

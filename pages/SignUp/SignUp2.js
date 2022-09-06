@@ -13,30 +13,45 @@ export default class SignUp2 extends Component {
     super(props);
     
     this.state = { 
+      register: {
+        customerType: 'individual',
+        firstName: '', 
+        middleName: '',
+        lastName: '',
+        username: '',
+        email: '',
+        mobileNumber: '',
+        streetAddress: '',
+        region: '',
+        province: '',
+        city: '',
+        barangay: '',
+        zipcode: '', 
+        password: '',
+        confirmPassword: '', 
+      },
       regionList: [],
       provinceList: [],
       cityList: [],
       barangayList: [],
-      streetAddress: '',
-      region: '',
-      province: '',
-      city: '',
-      barangay: '',
-      zipcode: '',
     };
   }
 
   async componentDidMount() {
-    //this.loadCompanyType()
-    this.loadRegion()
+    this.init();
+    this.loadRegion();
   }
 
-  // async loadCompanyType() {
-  //   let [companyTypes, err] = await FetchApi.companyTypes()
-  //   if(companyTypes) {
-  //     this.setState({companyTypes})
-  //   }
-  // }
+  async init() {
+    let register = await getStorage('register')
+    this.setState({register})
+  }
+
+  async signUp() {
+      let register = this.state.register;
+      await setStorage('register', register);
+      this.props.navigation.navigate('SignUp3')
+    }
 
   async loadRegion() {
     let [regionList, err] = await FetchApi.regions()
@@ -79,6 +94,7 @@ export default class SignUp2 extends Component {
   }
 
   render() {
+    let register = this.state.register;
     return(
       <View style={styles.container}>
         <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
@@ -99,7 +115,10 @@ export default class SignUp2 extends Component {
                     {/* Street Address */}
                     <TextInput
                       style={[styles.fullWidthInput, styles.marginTop]}
-                      onChangeText={(streetAddress) => {this.setState({streetAddress})}}
+                      onChangeText={(val) => {
+                        register.streetAddress = val;
+                        this.setState({register})
+                      }}
                       placeholder='House No., Lot, Street'
                       placeholderTextColor={'#808080'}
                     />
@@ -113,9 +132,12 @@ export default class SignUp2 extends Component {
                       keyExtractor= {region => region.code}
                       labelExtractor= {region => region.name}
                       initValue="Select Region"
-                      onChange={(region) => {this.setState({region:region.name}, async () => {
-                        await this.loadProvince(region.code);
-                      })}}
+                      onChange={(region) => {
+                        register.region = region.name;
+                        this.setState({register}, async () => {
+                          await this.loadProvince(region.code);
+                        });
+                      }}  
                       searchText={'Search'}
                       cancelText={'Cancel'}
                       style={styles.regionInput}
@@ -132,25 +154,32 @@ export default class SignUp2 extends Component {
                     {/* ZIP Code */}
                     <TextInput
                         style={[styles.zipInput]}
-                        onChangeText={(zipcode) => {this.setState({zipcode})}}
+                        onChangeText={(val) => {
+                          register.zipcode = val;
+                          this.setState({register})
+                        }}  
                         placeholder='ZIP Code'
                         placeholderTextColor={'#808080'}                        
                         keyboardType='number-pad'
                         returnKeyType='done'
+                        maxLength={4}
                       />
                   </View>
 
                   {/* Province */}
                   <View style={[styles.inputContainer, styles.marginTop, styles.row]}>
-                    { this.state.region !== '' ? 
+                    { register.region !== '' ? 
                       <ModalSelector
                         data={this.state.provinceList}
                         keyExtractor= {province => province.code}
                         labelExtractor= {province => province.name}
                         initValue="Select Province"
-                        onChange={(province) => {this.setState({province:province.name}, async () => {
-                          await this.loadCity(province.code);
-                        })}}
+                        onChange={(province) => {
+                          register.province = province.name;
+                          this.setState({register}, async () => {
+                            await this.loadCity(province.code);
+                          });
+                        }}  
                         searchText={'Search'}
                         cancelText={'Cancel'}
                         style={styles.fullWidthInput}
@@ -187,15 +216,18 @@ export default class SignUp2 extends Component {
 
                   {/* City */}
                   <View style={[styles.inputContainer, styles.marginTop]}>
-                    { this.state.province !== '' ?
+                    { register.province !== '' ?
                       <ModalSelector
                         data={this.state.cityList}
                         keyExtractor= {city => city.code}
                         labelExtractor= {city => city.name}
                         initValue="Select City"
-                        onChange={(city) => {this.setState({city:city.name}, async () => {
-                          await this.loadBarangay(city.code);
-                        })}}
+                        onChange={(city) => {
+                          register.city = city.name;
+                          this.setState({register}, async () => {
+                            await this.loadBarangay(city.code);
+                          });
+                        }}  
                         searchText={'Search'}
                         cancelText={'Cancel'}
                         style={styles.fullWidthInput}
@@ -230,13 +262,16 @@ export default class SignUp2 extends Component {
 
                   {/* Barangay */}
                   <View style={[styles.inputContainer, styles.marginTop]}>
-                    { this.state.city !== '' ? 
+                    { register.city !== '' ? 
                       <ModalSelector
                         data={this.state.barangayList}
                         keyExtractor= {barangay => barangay.code}
                         labelExtractor= {barangay => barangay.name}
                         initValue="Select Barangay"
-                        onChange={(barangay) => {this.setState({barangay:barangay.name})}}
+                        onChange={(barangay) => {
+                          register.barangay = barangay.name;
+                          this.setState({register});
+                        }} 
                         searchText={'Search'}
                         cancelText={'Cancel'}
                         style={styles.fullWidthInput}
@@ -272,12 +307,12 @@ export default class SignUp2 extends Component {
                   <View style={styles.alignItemCenter}>
                   {/* Next Button */}
                     {/* Make button gray when not all inputs are filled out, orange when filled out */}
-                    { this.state.streetAddress == '' || this.state.region == 0 || this.state.province == '' || this.state.city == '' || this.state.barangay == '' || this.state.zipcode == '' ?
+                    { register.streetAddress == '' || register.region == '' || register.province == '' || register.city == '' || register.barangay == '' || register.zipcode == 0 ?
                     <TouchableOpacity style={styles.nextButtonGray} disabled={true}>
                       <Text style={styles.buttonText}> NEXT </Text>
                     </TouchableOpacity>
                     :
-                    <TouchableOpacity style={styles.nextButtonOrange} onPress={() => alert('Next')}>
+                    <TouchableOpacity style={styles.nextButtonOrange} onPress={() => this.signUp() }>
                       <Text style={styles.buttonText}> NEXT </Text>
                     </TouchableOpacity>
                     }

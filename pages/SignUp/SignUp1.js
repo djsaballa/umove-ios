@@ -1,6 +1,8 @@
 import React, { Component }  from 'react';
 import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
+import Constants from 'expo-constants';
 
+import { RegistrationApi } from '../../api/registration';
 import { getStorage, setStorage } from '../../api/helper/storage';
 
 const bgImage = '../../assets/bg-image.png';
@@ -10,21 +12,60 @@ export default class SignUp1 extends Component {
     super();
     
     this.state = { 
-      customerType: 'individual',
-      firstName: '1', 
-      middleName: '1',
-      lastName: '1',
-      username: '1',
-      email: '1',
-      mobileNumber: '1',
+      register: {
+        customerType: 'Individual',
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        username: '',
+        email: '',
+        mobileNumber: '',
+        streetAddress: '',
+        region: '',
+        province: '',
+        city: '',
+        barangay: '',
+        zipcode: '',
+        password: '',
+        confirmPassword: '', 
+      },
+      error1: false,
+      error2: false,
+      error3: false,
+      message: []
     };
   }
 
+  async register() {
+    let register = this.state.register;
+    await setStorage('register', register)
+
+    let res = await RegistrationApi.individual()
+    this.setState({message: res}, async () => {
+      let response = this.state.message;
+      if(response.message.email) {
+        this.setState({error1: true})
+      } else if(response.message.username) {
+        this.setState({error2: true})
+      } else if(response.message.mobile_number) {
+        this.setState({error3: true})
+      } else {
+      this.props.navigation.navigate('SignUp2')
+      }
+    })
+  }
+
   render() {
+    let register = this.state.register;
     return(
       <View style={styles.container}>
         <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
           <View style={styles.innerContainer}>
+
+          {this.state.error1 ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> Email has already been taken, please use a different Email.  </Text></View> : null}
+          {this.state.error2 ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> Username has already been taken, please use a different Username.  </Text></View> : null}
+          {this.state.error3 ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> Mobile Number has already been taken, please use a different Mobile Number.   </Text></View> : null}
+
             <View style={styles.content}>
 
               <KeyboardAvoidingView behavior='padding'>
@@ -45,54 +86,72 @@ export default class SignUp1 extends Component {
                       </Text>
                       <TextInput
                         style={styles.input}
-                        onChangeText={(val) => {this.setState({firstName: val})}}  
+                        onChangeText={(val) => {
+                          register.firstName = val;
+                          this.setState({register})
+                        }} 
                       />
                     </View>
                     <View style={styles.inputPart}> 
                       <Text style={styles.text}>
-                        Middle Name
+                        Middle Name 
                       </Text>
                       <TextInput
                         style={styles.input}
-                        onChangeText={(val) => {this.setState({middleName: val})}}  
+                        onChangeText={(val) => {
+                          register.middleName = val;
+                          this.setState({register})
+                        }}  
                       />
                     </View>
                     <View style={styles.inputPart}> 
                       <Text style={styles.text}>
-                        Last Name
+                        Last Name 
                       </Text>
                       <TextInput
                         style={styles.input}
-                        onChangeText={(val) => {this.setState({lastName: val})}}  
+                        onChangeText={(val) => {
+                          register.lastName = val;
+                          this.setState({register})
+                        }}                        
                       />
                     </View>
                     <View style={styles.inputPart}> 
                       <Text style={styles.text}>
-                        Username
+                        Username 
                       </Text>
                       <TextInput
                         style={styles.input}
-                        onChangeText={(val) => {this.setState({firstName: val})}}  
+                        onChangeText={(val) => {
+                          register.username = val;
+                          this.setState({register})
+                        }}    
                       />
                     </View>
                     <View style={styles.inputPart}> 
                       <Text style={styles.text}>
-                        Email Address
+                        Email Address 
                       </Text>
                       <TextInput
                         style={styles.input}
                         keyboardType='email-address'
-                        onChangeText={(val) => {this.setState({email: val})}}
+                        onChangeText={(val) => {
+                          register.email = val;
+                          this.setState({register})
+                        }}                        
                       />
                     </View>
                     <View style={styles.inputPart}> 
                       <Text style={styles.text}>
-                        Mobile Number
+                        Mobile Number 
                       </Text>
                       <TextInput
                         style={styles.input}
                         keyboardType='numbers-and-punctuation'           
-                        onChangeText={(val) => {this.setState({mobileNumber: val})}}  
+                        onChangeText={(val) => {
+                          register.mobileNumber = val;
+                          this.setState({register})
+                        }}
                       />
                     </View>
                   </View>
@@ -100,12 +159,12 @@ export default class SignUp1 extends Component {
                   {/* Next Button */}
                   <View style={styles.alignItemCenter}>
                     {/* Make button gray when not all inputs are filled out, orange when filled out */}
-                    { this.state.firstName == '' || this.state.middleName == '' || this.state.lastName == '' || this.state.username == '' || this.state.email == '' || this.state.mobileNumber == ''  ?
+                    { register.firstName == '' || register.middleName == '' || register.lastName == '' || register.username == '' || register.email == '' || register.mobileNumber == ''  ?
                     <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
                       <Text style={styles.signUpButtonText}>NEXT</Text>
                     </TouchableOpacity>
                     :
-                    <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.props.navigation.navigate('SignUp2')}>
+                    <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.register() }>
                       <Text style={styles.signUpButtonText}>NEXT</Text>
                     </TouchableOpacity>
                     }
@@ -118,7 +177,7 @@ export default class SignUp1 extends Component {
                         <Text style={styles.loginText}>
                           Already have an account? {" "}
                         </Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Login') }>
                             <Text style={styles.underline}>
                               Log In
                             </Text>
@@ -231,5 +290,15 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textDecorationLine: 'underline',
+  },
+  errorContainer:{
+    width: '100%',
+    backgroundColor: '#ffcdd2',
+    marginTop: Constants.statusBarHeight
+  },
+  errorMessage:{
+    textAlign: 'center',
+    padding: 10,
+    color: '#d32f2f'
   }
 })
