@@ -4,9 +4,9 @@ import { StyleSheet, View, ImageBackground, Image, Text, TouchableWithoutFeedbac
 // import OTP Input View
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 
-const bgImage = '../../assets/bg-image.png';
+const bgImage = '../../../assets/bg-image.png';
 
-export default class SignUp3 extends Component {  
+export default class CorpSignUp7 extends Component {  
   constructor() {
     super();
     
@@ -26,7 +26,7 @@ export default class SignUp3 extends Component {
                 {/* Logo */}
                 <View style={styles.alignItemCenter}>
                   <Image
-                    source={require('../../assets/logo/logo.png')}
+                    source={require('../../../assets/logo/logo.png')}
                     style={styles.logo}
                   />
                 </View>

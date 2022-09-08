@@ -5,7 +5,7 @@ var request = new Request;
 
 export class AuthenticationApi {
   static login(username, password) {
-    return request.post('login', { username, password });
+    return request.post('customers/login', { username, password });
   }
 
   static async logout(refresh) {

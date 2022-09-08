@@ -2,18 +2,18 @@ import React, { Component }  from 'react';
 import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
 import Constants from 'expo-constants';
 
-import { RegistrationApi } from '../../api/registration';
-import { getStorage, setStorage } from '../../api/helper/storage';
+import { RegistrationApi } from '../../../api/registration';
+import { getStorage, setStorage } from '../../../api/helper/storage';
 
-const bgImage = '../../assets/bg-image.png';
+const bgImage = '../../../assets/bg-image.png';
 
-export default class SignUp1 extends Component { 
+export default class CorpSignUp1 extends Component { 
   constructor() {
     super();
     
     this.state = { 
       register: {
-        customerType: 'Individual',
+        customerType: '',
         firstName: '',
         middleName: '',
         lastName: '',
@@ -26,6 +26,17 @@ export default class SignUp1 extends Component {
         city: '',
         barangay: '',
         zipcode: '',
+        companyName: '',
+        companyType: '',
+        companyEmail: '',
+        companyMobileNumber: '',
+        companyAddress: '',
+        officeAddress: '',
+        officeRegion: '',
+        officeProvince: '',
+        officeCity: '',
+        officeBarangay: '',
+        officeZipcode: '',
         password: '',
         confirmPassword: '', 
       },
@@ -34,6 +45,10 @@ export default class SignUp1 extends Component {
       error3: false,
       message: []
     };
+  }
+
+  async componentDidMount() {
+    await setStorage('register', null)
   }
 
   async register() {
@@ -50,7 +65,7 @@ export default class SignUp1 extends Component {
       } else if(response.message.mobile_number) {
         this.setState({error3: true})
       } else {
-      this.props.navigation.navigate('SignUp2')
+      this.props.navigation.navigate('CorpSignUp2')
       }
     })
   }
@@ -73,7 +88,7 @@ export default class SignUp1 extends Component {
                   {/* Logo */}
                   <View style={styles.alignItemCenter}>
                     <Image
-                      source={require('../../assets/logo/logo.png')}
+                      source={require('../../../assets/logo/logo.png')}
                       style={styles.logo}
                     />
                   </View>
@@ -147,11 +162,12 @@ export default class SignUp1 extends Component {
                       </Text>
                       <TextInput
                         style={styles.input}
-                        keyboardType='numbers-and-punctuation'           
+                        keyboardType='number-pad'
                         onChangeText={(val) => {
                           register.mobileNumber = val;
                           this.setState({register})
                         }}
+                        maxLength={11}
                       />
                     </View>
                   </View>

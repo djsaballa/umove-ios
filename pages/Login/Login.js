@@ -189,7 +189,7 @@ export default class Login extends Component {
                       <Text style={styles.signUpText}>
                         Don't have an account? {" "}
                       </Text>
-                      <TouchableOpacity onPress={() => this.props.navigation.navigate('SignUp1')}>
+                      <TouchableOpacity onPress={() => this.props.navigation.navigate('IndivSignUp1')}>
                         <Text style={styles.underline}>
                           Sign Up
                         </Text>

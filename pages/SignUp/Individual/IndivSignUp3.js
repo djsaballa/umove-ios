@@ -2,19 +2,19 @@ import React, { Component }  from 'react';
 import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Constants from 'expo-constants';
 
-import { RegistrationApi } from '../../api/registration';
-import { AuthenticationApi } from '../../api/authentication'; 
-import { getStorage, setStorage } from '../../api/helper/storage';
+import { RegistrationApi } from '../../../api/registration';
+import { AuthenticationApi } from '../../../api/authentication'; 
+import { getStorage, setStorage } from '../../../api/helper/storage';
 
-const bgImage = '../../assets/bg-image.png';
+const bgImage = '../../../assets/bg-image.png';
 
-export default class SignUp3 extends Component {  
+export default class IndivSignUp3 extends Component {  
   constructor() {
     super();
     
     this.state = { 
       register: {
-        customerType: 'individual',
+        customerType: '',
         firstName: '', 
         middleName: '',
         lastName: '',
@@ -97,7 +97,7 @@ export default class SignUp3 extends Component {
                 {/* Logo */}
                 <View style={styles.alignItemCenter}>
                   <Image
-                    source={require('../../assets/logo/logo.png')}
+                    source={require('../../../assets/logo/logo.png')}
                     style={styles.logo}
                   />
                 </View>

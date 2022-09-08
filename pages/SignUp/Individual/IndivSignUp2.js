@@ -3,18 +3,18 @@ import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpa
 import Constants from 'expo-constants';
 import ModalSelector from 'react-native-modal-selector-searchable'
 
-import { FetchApi }  from '../../api/fetch'
-import { getStorage, setStorage } from '../../api/helper/storage';
+import { FetchApi }  from '../../../api/fetch'
+import { getStorage, setStorage } from '../../../api/helper/storage';
 
-const bgImage = '../../assets/bg-image.png';
+const bgImage = '../../../assets/bg-image.png';
 
-export default class SignUp2 extends Component {  
+export default class IndivSignUp2 extends Component {  
   constructor(props) {
     super(props);
     
     this.state = { 
       register: {
-        customerType: 'individual',
+        customerType: '',
         firstName: '', 
         middleName: '',
         lastName: '',
@@ -50,7 +50,7 @@ export default class SignUp2 extends Component {
   async signUp() {
       let register = this.state.register;
       await setStorage('register', register);
-      this.props.navigation.navigate('SignUp3')
+      this.props.navigation.navigate('IndivSignUp3')
     }
 
   async loadRegion() {
@@ -106,15 +106,20 @@ export default class SignUp2 extends Component {
                   {/* Logo */}
                   <View style={styles.alignItemCenter}>
                     <Image
-                      source={require('../../assets/logo/logo.png')}
+                      source={require('../../../assets/logo/logo.png')}
                       style={styles.logo}
                     />
                   </View>
 
-                  <View style={[styles.inputContainer, styles.row, styles.marginTop]}>
+                  <View style={[styles.inputContainer,]}>
+                    {/* Header */}
+                    <Text style={styles.text}>
+                      Residential Address
+                    </Text>
+
                     {/* Street Address */}
                     <TextInput
-                      style={[styles.fullWidthInput, styles.marginTop]}
+                      style={[styles.fullWidthInput]}
                       onChangeText={(val) => {
                         register.streetAddress = val;
                         this.setState({register})
@@ -355,7 +360,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 240,
     marginTop: '25%',
-    marginBottom: '10%',
+    marginBottom: '15%',
   },
   row: {
     flexDirection: 'row',
@@ -363,10 +368,16 @@ const styles = StyleSheet.create({
   marginTop: {
     marginTop: '6%'
   },
-    inputContainer: {
+  inputContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
+  text: {
+    fontSize: 18,
+    color: 'white',
+    marginBottom: '5%',
+    fontWeight: 'bold'
+  }, 
   fullWidthInput: {
     backgroundColor: 'white',
     width: '90%',
@@ -467,7 +478,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   nextButtonOrange: {
-    marginTop: '10%',
+    marginTop: '15%',
     height: 50,
     width: '70%',
     borderRadius: 25,
