@@ -13,23 +13,7 @@ export default class IndivSignUp2 extends Component {
     super(props);
     
     this.state = { 
-      register: {
-        customerType: '',
-        firstName: '', 
-        middleName: '',
-        lastName: '',
-        username: '',
-        email: '',
-        mobileNumber: '',
-        streetAddress: '',
-        region: '',
-        province: '',
-        city: '',
-        barangay: '',
-        zipcode: '', 
-        password: '',
-        confirmPassword: '', 
-      },
+      register: {},
       regionList: [],
       provinceList: [],
       cityList: [],

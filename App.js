@@ -43,7 +43,7 @@ export default class App extends Component{
         <Stack.Navigator initialRouteName="Landing" screenOptions={{headerShown: false}}>
           <Stack.Screen name="Landing" component={Landing} />
           <Stack.Screen name="Start" component={Start} options={{ cardStyleInterpolator: forFade, gestureEnabled: false }} />
-          <Stack.Screen name="Login" component={Login} options={{ cardStyleInterpolator: forFade }} />
+          <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
           <Stack.Screen name="IndivSignUp1" component={IndivSignUp1} options={{ cardStyleInterpolator: forFade }} />
           <Stack.Screen name="IndivSignUp2" component={IndivSignUp2} />
@@ -56,7 +56,7 @@ export default class App extends Component{
           <Stack.Screen name="CorpSignUp5" component={CorpSignUp5} />
           <Stack.Screen name="CorpSignUp6" component={CorpSignUp6} />
           <Stack.Screen name="CorpSignUp7" component={CorpSignUp7} />
-          <Stack.Screen name="QuickQuotation1" component={QuickQuotation1} options={{ cardStyleInterpolator: forFade }} />
+          <Stack.Screen name="QuickQuotation1" component={QuickQuotation1} />
           <Stack.Screen name="QuickQuotation2" component={QuickQuotation2} />
           <Stack.Screen name="QuickQuotation3" component={QuickQuotation3} />
           <Stack.Screen name="QuickQuotation4" component={QuickQuotation4} />

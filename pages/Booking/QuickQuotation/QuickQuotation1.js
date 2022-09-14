@@ -3,6 +3,8 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, Dimensions, Toucha
 import Constants from 'expo-constants';
 import DropDownPicker from 'react-native-dropdown-picker';
 
+import { getStorage, setStorage } from '../../../api/helper/storage';
+
 var deviceWidth = Dimensions.get('window').width
 
 export default class QuickQuotation1 extends Component {  
@@ -10,8 +12,32 @@ export default class QuickQuotation1 extends Component {
     super(props);
     
     this.state = { 
-      typeOpen: false,
+      booking: {
+        typeOfGood: '',
+        quantity: 0,
+        width: '',
+        length: '',
+        weight: '',
+        packagingType: '',
+        pickupStreetAddress: '',
+        pickupRegion: '',
+        pickupProvince: '',
+        pickupCity: '',
+        pickupBarangay: '',
+        pickupZipcode: '',
+        pickupLandmark: '',
+        pickupSpecialInstructions: '',
+        dropoffStreetAddress: '',
+        dropoffRegion: '',
+        dropoffProvince: '',
+        dropoffCity: '',
+        dropoffBarangay: '',
+        dropoffZipcode: '',
+        dropoffLandmark: '',
+        dropoffSpecialInstructions: ''
+      },
       typeValue: '',
+      typeOpen: false,
       typeItems: [
         {label: 'Perishable Goods', value: 'perishable goods'},
         {label: 'Dry Goods', value: 'dry goods'},
@@ -19,31 +45,36 @@ export default class QuickQuotation1 extends Component {
         {label: 'Liquids', value: 'liquids'},
         {label: 'Livestocks', value: 'livestocks'},
       ],
-      quantity: 0,
-      width: '',
-      length: '',
-      weight: '',
+      packagingTypeValue: '',
       packagingOpen: false,
-      packagingValue: '',
       packagingItems: [
         {label: 'Carton', value: 'carton'},
         {label: 'Drum', value: 'drum'},
         {label: 'Crates', value: 'crates'},
         {label: 'Sacks', value: 'sacks'},
-
       ],    
     };
   }
 
+  async booking() {
+    let booking = this.state.booking;
+    await setStorage('booking', booking)
+  }
+
   plusQuantity = () => {
-    this.setState({ quantity: (this.state.quantity + 1) });
+    let booking = this.state.booking;
+    booking.quantity += 1
+    this.setState({ booking });
   }
 
   minusQuantity = () => {
-    this.setState({ quantity: (this.state.quantity - 1) });
+    let booking = this.state.booking;
+    booking.quantity -= 1
+    this.setState({ booking });
   }
 
   render() {
+    let booking = this.state.booking;
     return(
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
@@ -65,7 +96,11 @@ export default class QuickQuotation1 extends Component {
                 value={this.state.typeValue}
                 setOpen={() => {this.setState({typeOpen: !this.state.typeOpen})}}
                 setValue={(callback) => {this.setState(state => ({
-                  typeValue: callback(state.typeValue)}))}}
+                  typeValue: callback(state.typeValue)}), () => {
+                    booking.typeOfGood = this.state.typeValue;
+                    this.setState({ booking })
+                  })
+                }}
                 setItems={(callback) => {this.setState(state => ({
                   typeItems: callback(state.typeItems)}))}}
               />
@@ -76,7 +111,7 @@ export default class QuickQuotation1 extends Component {
               <View style={[styles.row, styles.alignItemCenter]}>
                 <Text style={styles.inputLabel}> Quantity </Text>
                 {/* Make minus sign gray when quantity is 0, orange when 1 or more*/}
-                { this.state.quantity == 0 ?
+                { booking.quantity == 0 ?
                   <TouchableOpacity style={styles.quantityButtonGray} disabled={true}>
                     <Text style={styles.quantityButtonText}> - </Text>
                   </TouchableOpacity>
@@ -86,7 +121,7 @@ export default class QuickQuotation1 extends Component {
                   </TouchableOpacity>
                 }
                 {/* Display quantity */}
-                <Text style={styles.quantityText}> {this.state.quantity} </Text>
+                <Text style={styles.quantityText}> {booking.quantity} </Text>
                 {/* Add quantity sign */}
                 <TouchableOpacity style={styles.quantityButtonOrange} onPress={this.plusQuantity}>
                   <Text style={styles.quantityButtonText}> + </Text>
@@ -104,7 +139,10 @@ export default class QuickQuotation1 extends Component {
                 </View>
                 <TextInput
                   style={styles.widthLengthWeightInput}
-                  onChangeText={(width) => {this.setState({width})}}
+                  onChangeText={(width) => {
+                    booking.width = width;
+                    this.setState({ booking })
+                  }}
                   placeholder="00.00 mm"
                   placeholderTextColor={'#C3C3C3'}
                   keyboardType='decimal-pad'
@@ -120,7 +158,10 @@ export default class QuickQuotation1 extends Component {
                 </View>
                 <TextInput
                     style={styles.widthLengthWeightInput}
-                    onChangeText={(length) => {this.setState({length})}}
+                    onChangeText={(length) => {
+                      booking.length = length;
+                      this.setState({ booking })
+                    }}
                     placeholder="00.00 mm"
                     placeholderTextColor={'#C3C3C3'}
                     keyboardType='decimal-pad'
@@ -139,7 +180,10 @@ export default class QuickQuotation1 extends Component {
                 </View>
                   <TextInput
                     style={styles.widthLengthWeightInput}
-                    onChangeText={(weight) => {this.setState({weight})}}
+                    onChangeText={(weight) => {
+                      booking.weight = weight;
+                      this.setState({ booking })
+                    }}
                     placeholder="00.00 kg"
                     placeholderTextColor={'#C3C3C3'}
                     keyboardType='decimal-pad'
@@ -155,10 +199,14 @@ export default class QuickQuotation1 extends Component {
                   containerStyle={styles.packagingDropdownContainerStyle}
                   open={this.state.packagingOpen} 
                   items={this.state.packagingItems}
-                  value={this.state.packagingValue}
+                  value={this.state.packagingTypeValue}
                   setOpen={() => {this.setState({packagingOpen: !this.state.packagingOpen})}}
                   setValue={(callback) => {this.setState(state => ({
-                    packagingValue: callback(state.packagingValue)}))}}
+                    packagingTypeValue: callback(state.packagingTypeValue)}), () => {
+                      booking.packagingType = this.state.packagingTypeValue;
+                      this.setState({ booking })
+                    })
+                  }}
                   setItems={(callback) => {this.setState(state => ({
                     packagingItems: callback(state.packagingItems)}))}}
                 />
@@ -168,24 +216,31 @@ export default class QuickQuotation1 extends Component {
           <View style={styles.alignItemCenter}>
           {/* Add Additional Items Button */}
             {/* Make button gray when not all inputs are filled out, orange when filled out */}
-            { this.state.typeValue == '' || this.state.quantity == 0 || this.state.width == '' || this.state.length == '' || this.state.weight == '' || this.state.packagingValue == '' ?
+            { booking.typeValue == '' || booking.quantity == 0 || booking.width == '' || booking.length == '' || booking.weight == '' || booking.packagingValue == '' ?
             <TouchableOpacity style={styles.addButtonGray} disabled={true}>
               <Text style={styles.buttonText}> Add Additional Item </Text>
             </TouchableOpacity>
             :
-            <TouchableOpacity style={styles.addButtonOrange} onPress={() => alert('Add Item')}>
-              <Text style={styles.buttonText}> Add Additional Item </Text>
+            // Leave Disabled for Now
+            // <TouchableOpacity style={styles.addButtonOrange} onPress={() => alert('Add Item')}>
+            //   <Text style={styles.buttonText}> Add Additional Item </Text>
+            // </TouchableOpacity>
+            <TouchableOpacity style={styles.addButtonGray} disabled={true}>
+              <Text style={styles.buttonText}> Add Additional Items </Text>
             </TouchableOpacity>
             }
 
           {/* Next Button */}
             {/* Make button gray when not all inputs are filled out, orange when filled out */}
-            { this.state.typeValue == '' || this.state.quantity == 0 || this.state.width == '' || this.state.length == '' || this.state.weight == '' || this.state.packagingValue == '' ?
+            { booking.typeOfGood == '' || booking.quantity == 0 || booking.width == '' || booking.length == '' || booking.weight == '' || booking.packagingType == '' ?
             <TouchableOpacity style={styles.nextButtonGray} disabled={true}>
               <Text style={styles.buttonText}> NEXT </Text>
             </TouchableOpacity>
             :
-            <TouchableOpacity style={styles.nextButtonOrange} onPress={() => alert('Next')}>
+            <TouchableOpacity style={styles.nextButtonOrange} onPress={() => {
+              this.booking();
+              this.props.navigation.navigate('QuickQuotation2')
+            }}>
               <Text style={styles.buttonText}> NEXT </Text>
             </TouchableOpacity>
             }

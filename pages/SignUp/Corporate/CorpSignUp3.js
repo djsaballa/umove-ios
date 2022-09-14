@@ -13,34 +13,7 @@ export default class CorpSignUp3 extends Component {
     super(props);
     
     this.state = { 
-      register: {
-        customerType: '',
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        username: '',
-        email: '',
-        mobileNumber: '',
-        streetAddress: '',
-        region: '',
-        province: '',
-        city: '',
-        barangay: '',
-        zipcode: '',
-        companyName: '',
-        companyType: '',
-        companyEmail: '',
-        companyMobileNumber: '',
-        companyAddress: '',
-        officeAddress: '',
-        officeRegion: '',
-        officeProvince: '',
-        officeCity: '',
-        officeBarangay: '',
-        officeZipcode: '',
-        password: '',
-        confirmPassword: '', 
-      },
+      register: {},
       companyTypeList: [],
     };
   }

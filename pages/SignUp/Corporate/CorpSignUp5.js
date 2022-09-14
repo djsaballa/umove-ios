@@ -12,42 +12,12 @@ export default class CorpSignUp5 extends Component {
     super(props);
     
     this.state = { 
-      register: {
-        customerType: '',
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        username: '',
-        email: '',
-        mobileNumber: '',
-        streetAddress: '',
-        region: '',
-        province: '',
-        city: '',
-        barangay: '',
-        zipcode: '',
-        companyName: '',
-        companyType: '',
-        companyEmail: '',
-        companyMobileNumber: '',
-        companyAddress: '',
-        officeAddress: '',
-        officeRegion: '',
-        officeProvince: '',
-        officeCity: '',
-        officeBarangay: '',
-        officeZipcode: '',
-        password: '',
-        confirmPassword: '', 
-        bir: null,
-        dti: null,
-        validId: null
-      },
+      register: {},
     };
   }
 
   async componentDidMount() {
-    //this.init();
+    this.init();
   }
 
   async init() {

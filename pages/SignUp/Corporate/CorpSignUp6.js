@@ -2,8 +2,7 @@ import React, { Component }  from 'react';
 import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Constants from 'expo-constants';
 
-import { RegistrationApi } from '../../../api/registration';
-import { AuthenticationApi } from '../../../api/authentication'; 
+import { CustomerApi } from '../../../api/customer'; 
 import { getStorage, setStorage } from '../../../api/helper/storage';
 
 const bgImage = '../../../assets/bg-image.png';
@@ -13,34 +12,7 @@ export default class CorpSignUp6 extends Component {
     super();
     
     this.state = { 
-      register: {
-        customerType: '',
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        username: '',
-        email: '',
-        mobileNumber: '',
-        streetAddress: '',
-        region: '',
-        province: '',
-        city: '',
-        barangay: '',
-        zipcode: '',
-        companyName: '',
-        companyType: '',
-        companyEmail: '',
-        companyMobileNumber: '',
-        companyAddress: '',
-        officeAddress: '',
-        officeRegion: '',
-        officeProvince: '',
-        officeCity: '',
-        officeBarangay: '',
-        officeZipcode: '',
-        password: '',
-        confirmPassword: '', 
-      }, 
+      register: {},
       error1: false,
       error2: false,
       error3: false,
@@ -60,7 +32,7 @@ export default class CorpSignUp6 extends Component {
   async signUp() {
     let register = this.state.register
     await setStorage('register', register)
-    let res = await RegistrationApi.individual()
+    let res = await CustomerApi.individual()
     this.setState({message: res}, async () => {
       let response = this.state.message;
       if(register.password.length < 8) {
@@ -81,7 +53,7 @@ export default class CorpSignUp6 extends Component {
         await setStorage('remember', 'true')
         await setStorage('loginInfo', loginInfo)
 
-        let [r, e] = await AuthenticationApi.login(loginInfo[0], loginInfo[1]);
+        let [r, e] = await CustomerApi.login(loginInfo[0], loginInfo[1]);
         if(r) {
           await setStorage('user', r)
           this.props.navigation.navigate('Dashboard');

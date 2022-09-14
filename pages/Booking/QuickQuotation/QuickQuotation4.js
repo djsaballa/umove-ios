@@ -1,14 +1,60 @@
 import React, { Component }  from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image, Modal, TouchableWithoutFeedback } from 'react-native';
 
 const bgImage = '../../../assets/bg-image.png';
 
 export default class QuickQuotation4 extends Component {  
+  constructor() {
+    super();
+    
+    this.state = { 
+      amount: '00.00',
+      modalVisible: false
+    };
+  }
+
+  setModalVisible = (visible) => {
+    this.setState({ modalVisible: visible });
+  }
+
   render() {
+    const { modalVisible } = this.state;
     return(
       <View style={styles.container}>
         <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
           <View style={styles.innerContainer}>
+
+          <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => this.setState({modalVisible: false}) }
+              >
+                <TouchableWithoutFeedback onPress={() => this.setState({modalVisible: false}) }>
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      <Text style={styles.modalText}>Sign Up as:</Text>
+                      <View style={styles.modalRow}>
+                        <TouchableOpacity
+                          style={[styles.button, styles.modalButton]}
+                          onPress={() => this.setState({modalVisible: false}, () => {
+                            this.props.navigation.navigate('IndivSignUp1')
+                        })}>
+                          <Text style={styles.textStyle}>Individual</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[styles.button, styles.modalButton]}
+                          onPress={() => this.setState({modalVisible: false}, () => {
+                            this.props.navigation.navigate('CorpSignUp1')
+                        })}>                        
+                          <Text style={styles.textStyle}>Corporate</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableWithoutFeedback>
+              </Modal>
+
             <View style={styles.content}>
 
               {/* Logo */}
@@ -19,9 +65,42 @@ export default class QuickQuotation4 extends Component {
                 />
               </View>
 
-              {/* Buttons */}
+              {/* Amount */}
+              <View style={styles.amountContainer}>
+                <View style={styles.placeholder}>
+                  <View style={styles.amountLabelContainer}>
+                    <Text style={styles.amountLabelText}>AMOUNT</Text>
+                  </View>
+                  <View style={[styles.priceContainer]}>
+                    <View>
+                      <Text style={styles.amountText}>
+                        ₱
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.amountText}>
+                        {this.state.amount}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+
+              {/* Note */}
               <View style={styles.alignItemCenter}>
-                <Text style={styles.buttonText}>AMOUNT</Text>
+                <View style={styles.noteContainer}>
+                    <Text style={styles.noteText}>  
+                      Note : Here's the quick quotation
+                      based on the cargo details, pick
+                      up and delivery address provided. If
+                      you want greater value, we offer
+                      shared ride options that can
+                      provide cheaper delivery rate by
+                      Sharing the delivery space and
+                      cost with other customers headed
+                      on the same destination
+                    </Text>
+                  </View>
               </View>
 
               <View style={styles.alignItemCenter}>
@@ -29,7 +108,7 @@ export default class QuickQuotation4 extends Component {
                   <TouchableOpacity style={styles.loginButton} onPress={() => this.props.navigation.navigate('Login')}>
                     <Text style={styles.buttonText}>Login</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.signupButton} onPress={() => this.props.navigation.navigate('SignUp1')}>
+                  <TouchableOpacity style={styles.signupButton} onPress={() => this.setModalVisible(true)}>
                     <Text style={styles.buttonText}>Sign Up</Text>
                   </TouchableOpacity>
                 </View>
@@ -70,22 +149,45 @@ const styles = StyleSheet.create({
     marginBottom: '15%',
   },
   row: {
-    marginTop: '15%',
     flexDirection: 'row',
-    alignItems: 'center',    
   },
-  quickQuotationButton: {
-    marginTop: '35%',
-    height: 50,
-    width: '55%',
-    borderRadius: 10,
-    justifyContent:'center',
+  placeholder: {
+    width: '60%',
+    height: 100,
+    marginBottom: '20%',
+    justifyContent: 'space-evenly',
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    borderRadius: 15
+  },
+  amountContainer: {
     alignItems: 'center',
-    backgroundColor: 'rgb(223,131,68)',
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 6},
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
+    justifyContent: 'center'
+  },
+  amountLabelContainer: {
+    alignItems: 'center'
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
+  },
+  amountLabelText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight:'bold',
+  },
+  amountText: {
+    color: 'white',
+    fontSize: 25,
+    fontWeight: '300'
+  },
+  noteContainer: {
+    width: '70%',
+    marginBottom: '25%'
+  },
+  noteText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'justify'
   },
   loginButton: {
     height: 50,
@@ -117,4 +219,50 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight:'bold'
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  modalRow: {
+    marginTop: '5%',
+    flexDirection: 'row',
+    alignItems: 'center',    
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    margin: 5
+  },
+  modalButton: {
+    backgroundColor: "rgb(223,131,68)",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 15
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 18,
+    fontWeight: 'bold'
+  }
 })

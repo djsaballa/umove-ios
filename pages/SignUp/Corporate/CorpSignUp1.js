@@ -2,7 +2,7 @@ import React, { Component }  from 'react';
 import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
 import Constants from 'expo-constants';
 
-import { RegistrationApi } from '../../../api/registration';
+import { CustomerApi } from '../../../api/customer';
 import { getStorage, setStorage } from '../../../api/helper/storage';
 
 const bgImage = '../../../assets/bg-image.png';
@@ -13,7 +13,7 @@ export default class CorpSignUp1 extends Component {
     
     this.state = { 
       register: {
-        customerType: '',
+        customerType: 'Corporate',
         firstName: '',
         middleName: '',
         lastName: '',
@@ -39,6 +39,9 @@ export default class CorpSignUp1 extends Component {
         officeZipcode: '',
         password: '',
         confirmPassword: '', 
+        bir: null,
+        dti: null,
+        validId: null
       },
       error1: false,
       error2: false,
@@ -55,7 +58,7 @@ export default class CorpSignUp1 extends Component {
     let register = this.state.register;
     await setStorage('register', register)
 
-    let res = await RegistrationApi.individual()
+    let res = await CustomerApi.individual()
     this.setState({message: res}, async () => {
       let response = this.state.message;
       if(response.message.email) {

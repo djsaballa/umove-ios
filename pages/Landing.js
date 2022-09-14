@@ -2,7 +2,7 @@ import React, { Component }  from 'react';
 import { StyleSheet, View, ImageBackground, Image } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners'
 
-import { AuthenticationApi } from '../api/authentication'; 
+import { CustomerApi } from '../api/customer'; 
 import { getStorage, setStorage } from '../api/helper/storage';
 
 const bgImage = '../assets/bg-image.png';
@@ -42,7 +42,7 @@ export default class Landing extends Component {
       if(loginInfo) {
         this.setState({username: loginInfo[0]})
         this.setState({password: loginInfo[1]})
-        let [res, err] = await AuthenticationApi.login(loginInfo[0], loginInfo[1]);
+        let [res, err] = await CustomerApi.login(loginInfo[0], loginInfo[1]);
         if(err) {
           this.setState({ error: true });
         }

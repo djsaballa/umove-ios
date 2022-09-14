@@ -1,245 +1,353 @@
 import React, { Component }  from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Keyboard } from 'react-native';
 import Constants from 'expo-constants';
 import ModalSelector from 'react-native-modal-selector-searchable'
 
-const barangayList = [
-  { key: 0, section: true, label: 'Select Barangay' },
-  { key: 1, label: 'Barangay 1' },
-  { key: 2, label: 'Barangay 2' },
-  { key: 3, label: 'Barangay 3' },
-  { key: 4, label: 'Barangay 4' },
-  { key: 5, label: 'Barangay 5' },
-  { key: 6, label: 'Barangay 6' },
-  { key: 7, label: 'Barangay 7' },
-  { key: 8, label: 'Barangay 8' },
-  { key: 9, label: 'Barangay 9' },
-  { key: 10, label: 'Barangay 10' },
-  { key: 11, label: 'Barangay 11' },
-  { key: 12, label: 'Barangay 12' },
-  { key: 13, label: 'Barangay 13' },
-  { key: 14, label: 'Barangay 14' },
-  { key: 15, label: 'Barangay 15' },
-  { key: 16, label: 'Barangay 16' },
-  { key: 17, label: 'Barangay 17' },
-  { key: 18, label: 'Barangay 18' },
-  { key: 19, label: 'Barangay 19' },
-  { key: 20, label: 'Barangay 20' },
-  { key: 21, label: 'Barangay 21' },
-];
+import { FetchApi } from '../../../api/fetch';
+import { getStorage, setStorage } from '../../../api/helper/storage';
 
-const cityList = [
-  { key: 0, section: true, label: 'Select City' },
-  { key: 1, label: 'City 1' },
-  { key: 2, label: 'City 2' },
-  { key: 3, label: 'City 3' },
-  { key: 4, label: 'City 4' },
-  { key: 5, label: 'City 5' },
-  { key: 6, label: 'City 6' },
-  { key: 7, label: 'City 7' },
-  { key: 8, label: 'City 8' },
-  { key: 9, label: 'City 9' },
-  { key: 10, label: 'City 10' },
-  { key: 11, label: 'City 11' },
-  { key: 12, label: 'City 12' },
-  { key: 13, label: 'City 13' },
-  { key: 14, label: 'City 14' },
-  { key: 15, label: 'City 15' },
-  { key: 16, label: 'City 16' },
-  { key: 17, label: 'City 17' },
-  { key: 18, label: 'City 18' },
-  { key: 19, label: 'City 19' },
-  { key: 20, label: 'City 20' },
-  { key: 21, label: 'City 21' },
-];
-
-const provinceList = [
-  { key: 0, section: true, label: 'Select Province' },
-  { key: 1, label: 'Province 1' },
-  { key: 2, label: 'Province 2' },
-  { key: 3, label: 'Province 3' },
-  { key: 4, label: 'Province 4' },
-  { key: 5, label: 'Province 5' },
-  { key: 6, label: 'Province 6' },
-  { key: 7, label: 'Province 7' },
-  { key: 8, label: 'Province 8' },
-  { key: 9, label: 'Province 9' },
-  { key: 10, label: 'Province 10' },
-  { key: 11, label: 'Province 11' },
-  { key: 12, label: 'Province 12' },
-  { key: 13, label: 'Province 13' },
-  { key: 14, label: 'Province 14' },
-  { key: 15, label: 'Province 15' },
-  { key: 16, label: 'Province 16' },
-  { key: 17, label: 'Province 17' },
-  { key: 18, label: 'Province 18' },
-  { key: 19, label: 'Province 19' },
-  { key: 20, label: 'Province 20' },
-  { key: 21, label: 'Province 21' },
-];
-
-
-export default class QuickQuotation3 extends Component {  
+export default class QuickQuotation2 extends Component {  
   constructor(props) {
     super(props);
     
     this.state = { 
-      date: '',
-      time: '',
-      contactPerson: '',
-      mobileNumber: '',
-      streetAddress: '',
-      barangay: '',
-      city: '',
-      province: '',
-      zipcode: '',
-      landmark: '',
+      booking: {},
+      regionList: [],
+      provinceList: [],
+      cityList: [],
+      barangayList: []
     };
   }
 
+  async componentDidMount() {
+    this.init();
+    this.loadRegion();
+  }
+
+  async init() {
+    let booking = await getStorage('booking');
+    this.setState({ booking })
+  }
+
+  async booking() {
+    let booking = this.state.booking;
+    await setStorage('booking', booking)
+    let book = await getStorage('booking')
+    console.log(book)
+  }
+
+  async loadRegion() {
+    let [regionList, err] = await FetchApi.regions()
+    if(regionList) {
+      this.setState({regionList})
+    } 
+    if(err) {
+      console.log(err)
+    }
+  }
+
+  async loadProvince(regionCode) {
+    let [provinceList, err] = await FetchApi.provinces(regionCode)
+    if(provinceList) {
+      this.setState({provinceList})
+    } 
+    if(err) {
+      console.log(err)
+    }
+  }
+
+  async loadCity(provinceCode) {
+    let [cityList, err] = await FetchApi.cities(provinceCode)
+    if(cityList) {
+      this.setState({cityList})
+    } 
+    if(err) {
+      console.log(err)
+    }
+  }
+
+  async loadBarangay(cityCode) {
+    let [barangayList, err] = await FetchApi.barangays(cityCode)
+    if(barangayList) {
+      this.setState({barangayList})
+    }
+    if(err) {
+      console.log(err)
+    }
+  }
+
   render() {
+    let booking = this.state.booking;
     return(
       <View style={styles.container}>
 
-        {/* Header for Delivery Address */}
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Delivery Address</Text>
-        </View>
+        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={-50}>
+            {/* Header for Delivery Address */}
+            <View style={styles.header}>
+              <Text style={styles.headerText}>Delivery Address</Text>
+            </View>
 
-        <ScrollView>
-          <View style={styles.labelContainer}>
-            <Text style={styles.labelText}> Drop-Off Details </Text>
-          </View>
-          {/* Date and Time */}
-          <View style={[styles.inputContainer, styles.row, styles.marginTop]}>
-            <TextInput
-              style={styles.dateInput}
-              onChangeText={(date) => {this.setState({date})}}
-              placeholder='March 22, 2022'
-              placeholderTextColor={'#C3C3C3'}
-            />
-            <TextInput
-              style={styles.timeInput}
-              onChangeText={(time) => {this.setState({time})}}
-              placeholder='ASAP'
-              placeholderTextColor={'#C3C3C3'}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            {/* Contact Person */}
-            <TextInput
-              style={[styles.fullWidthInput, styles.marginTop]}
-              onChangeText={(contactPerson) => {this.setState({contactPerson})}}
-              placeholder='Contact Person'
-              placeholderTextColor={'#C3C3C3'}
-            />
-            {/* Mobile Number */}
-            <TextInput
-              style={[styles.fullWidthInput, styles.marginTop]}
-              onChangeText={(mobileNumber) => {this.setState({mobileNumber})}}
-              placeholder='Mobile Number'
-              placeholderTextColor={'#C3C3C3'}
-            />
-            {/* Street Address */}
-            <TextInput
-              style={[styles.fullWidthInput, styles.marginTop]}
-              onChangeText={(streetAddress) => {this.setState({streetAddress})}}
-              placeholder='Street Address'
-              placeholderTextColor={'#C3C3C3'}
-            />
-          </View>
-          {/* Barangay and City */}
-          <View style={[styles.inputContainer, styles.marginTop, styles.row]}>
-            {/* Barangay */}
-            <ModalSelector
-              data={barangayList}
-              initValue="Barangay"
-              onChange={(barangay) => {this.setState({barangay:barangay.label})}}
-              searchText={'Search'}
-              cancelText={'Cancel'}
-              style={styles.barangayInput}
-              initValueTextStyle={styles.initValueTextStyle}
-              searchStyle={styles.searchStyle}
-              selectStyle={styles.selectStyle1}
-              selectTextStyle={styles.selectTextStyle}
-              sectionTextStyle={styles.sectionTextStyle}
-              cancelStyle={styles.cancelStyle}
-              cancelTextStyle={styles.cancelTextStyle}
-              overlayStyle={styles.overlayStyle}
-            />
-            {/* City */}
-            <ModalSelector
-              data={cityList}
-              initValue="City"
-              onChange={(city) => {this.setState({city:city.label})}}
-              searchText={'Search'}
-              cancelText={'Cancel'}
-              style={styles.cityInput}
-              initValueTextStyle={styles.initValueTextStyle}
-              searchStyle={styles.searchStyle}
-              selectStyle={styles.selectStyle1}
-              selectTextStyle={styles.selectTextStyle}
-              sectionTextStyle={styles.sectionTextStyle}
-              cancelStyle={styles.cancelStyle}
-              cancelTextStyle={styles.cancelTextStyle}
-              overlayStyle={styles.overlayStyle}
-            />
-          </View>
-          {/* Province and ZIP Code */}
-          <View style={[styles.inputContainer, styles.marginTop, styles.row]}>
-            {/* Province */}
-            <ModalSelector
-              data={provinceList}
-              initValue="Province"
-              onChange={(province) => {this.setState({province:province.label})}}
-              searchText={'Search'}
-              cancelText={'Cancel'}
-              style={styles.provinceInput}
-              initValueTextStyle={styles.initValueTextStyle}
-              searchStyle={styles.searchStyle}
-              selectStyle={styles.selectStyle2}
-              selectTextStyle={styles.selectTextStyle}
-              sectionTextStyle={styles.sectionTextStyle}
-              cancelStyle={styles.cancelStyle}
-              cancelTextStyle={styles.cancelTextStyle}
-              overlayStyle={styles.overlayStyle}
-              touchableActiveOpacity={styles.touchableActiveOpacity}
-            />
-            {/* ZIP Code */}
-            <TextInput
-                style={[styles.zipInput]}
-                onChangeText={(zipcode) => {this.setState({zipcode})}}
-                placeholder='ZIP Code'
-                placeholderTextColor={'#C3C3C3'}
-                keyboardType='number-pad'
-                returnKeyType='done'
+          <ScrollView>
+
+            <View style={styles.labelContainer}>
+              <Text style={styles.labelText}> Drop Off Details </Text>
+            </View>
+
+            {/* Date and Time */}
+            {/* <View style={[styles.inputContainer, styles.row, styles.marginTop]}>
+              <TextInput
+                style={styles.dateInput}
+                onChangeText={(date) => {this.setState({date})}}
+                placeholder='March 22, 2022'
+                placeholderTextColor={'#808080'}
               />
-          </View>
-          <View style={styles.inputContainer}>
-            {/* Landmarks */}
-            <TextInput
-              style={[styles.fullWidthInput, styles.marginTop]}
-              onChangeText={(landmark) => {this.setState({landmark})}}
-              placeholder='Landmarks (Optional)'
-              placeholderTextColor={'#C3C3C3'}
-            />
-          </View>
+              <TextInput
+                style={styles.timeInput}
+                onChangeText={(time) => {this.setState({time})}}
+                placeholder='ASAP'
+                placeholderTextColor={'#808080'}
+              />
+            </View> */}
 
-          <View style={styles.alignItemCenter}>
-          {/* Next Button */}
-            {/* Make button gray when not all inputs are filled out, orange when filled out */}
-            { this.state.date == '' || this.state.time == '' || this.state.contactPerson == '' || this.state.mobileNumber == '' || this.state.streetAddress == '' || this.state.barangay == '' || this.state.city == '' || this.state.province == '' || this.state.zipcode == '' || this.state.landmark == '' ?
-            <TouchableOpacity style={styles.nextButtonGray} disabled={true}>
-              <Text style={styles.buttonText}> NEXT </Text>
-            </TouchableOpacity>
-            :
-            <TouchableOpacity style={styles.nextButtonOrange} onPress={() => alert('Next')}>
-              <Text style={styles.buttonText}> NEXT </Text>
-            </TouchableOpacity>
+            <View style={styles.inputContainer}>
+              {/* Street Address */}
+              <TextInput
+                style={[styles.fullWidthInput, styles.marginTop]}
+                onChangeText={(streetAddress) => {
+                  booking.dropoffStreetAddress = streetAddress;
+                  this.setState({ booking })
+                }}
+                placeholder='House No., Lot, Street'
+                placeholderTextColor={'#808080'}
+              />
+            </View>
+            {/* Region and Zip Code */}
+            <View style={[styles.inputContainer, styles.marginTop, styles.row]}>
+              {/* Region */}
+              <ModalSelector
+                data={this.state.regionList}
+                keyExtractor= {region => region.code}
+                labelExtractor= {region => region.name}
+                initValue="Select Region"
+                onChange={(region) => {
+                  booking.dropoffRegion = region.name;
+                  this.setState({booking}, async () => {
+                    await this.loadProvince(region.code);
+                  });
+                }}  
+                searchText={'Search'}
+                cancelText={'Cancel'}
+                style={styles.regionInput}
+                initValueTextStyle={styles.initValueTextStyle}
+                searchStyle={styles.searchStyle}
+                selectStyle={styles.selectStyle2}
+                selectTextStyle={styles.selectTextStyle}
+                sectionTextStyle={styles.sectionTextStyle}
+                cancelStyle={styles.cancelStyle}
+                cancelTextStyle={styles.cancelTextStyle}
+                overlayStyle={styles.overlayStyle}
+                touchableActiveOpacity={styles.touchableActiveOpacity}
+              />
+              {/* ZIP Code */}
+              <TextInput
+                  style={[styles.zipInput]}
+                  onChangeText={(val) => {
+                    booking.dropoffZipcode = val;
+                    this.setState({booking})
+                  }}  
+                  placeholder='ZIP Code'
+                  placeholderTextColor={'#808080'}                        
+                  keyboardType='number-pad'
+                  returnKeyType='done'
+                  maxLength={4}
+                />
+            </View>
+            {/* Province */}
+            <View style={[styles.inputContainer, styles.marginTop, styles.row]}>
+              { booking.dropoffRegion !== '' ? 
+              <ModalSelector
+                data={this.state.provinceList}
+                keyExtractor= {province => province.code}
+                labelExtractor= {province => province.name}
+                initValue="Select Province"
+                onChange={(province) => {
+                  booking.dropoffProvince = province.name;
+                  this.setState({booking}, async () => {
+                    await this.loadCity(province.code);
+                  });
+                }}
+                searchText={'Search'}
+                cancelText={'Cancel'}
+                style={styles.fullWidthInput}
+                initValueTextStyle={styles.initValueTextStyle}
+                searchStyle={styles.searchStyle}
+                selectStyle={styles.selectStyle1}
+                selectTextStyle={styles.selectTextStyle}
+                sectionTextStyle={styles.sectionTextStyle}
+                cancelStyle={styles.cancelStyle}
+                cancelTextStyle={styles.cancelTextStyle}
+                overlayStyle={styles.overlayStyle}
+                touchableActiveOpacity={styles.touchableActiveOpacity}
+              />
+              :
+              <ModalSelector
+                disabled={true}
+                data={this.state.provinceList}
+                initValue="Select Province"
+                searchText={'Search'}
+                cancelText={'Cancel'}
+                style={styles.disabledFullWidthInput}
+                initValueTextStyle={styles.initValueTextStyle}
+                searchStyle={styles.searchStyle}
+                selectStyle={styles.disabledSelectStyle}
+                selectTextStyle={styles.selectTextStyle}
+                sectionTextStyle={styles.sectionTextStyle}
+                cancelStyle={styles.cancelStyle}
+                cancelTextStyle={styles.cancelTextStyle}
+                overlayStyle={styles.overlayStyle}
+                touchableActiveOpacity={styles.touchableActiveOpacity}
+              />
+              }
+            </View>
+
+          {/* City */}
+          <View style={[styles.inputContainer, styles.marginTop]}>
+            { booking.dropoffProvince !== '' ?
+              <ModalSelector
+                data={this.state.cityList}
+                keyExtractor= {city => city.code}
+                labelExtractor= {city => city.name}
+                initValue="Select City"
+                onChange={(city) => {
+                  booking.dropoffCity = city.name;
+                  this.setState({booking}, async () => {
+                    await this.loadBarangay(city.code);
+                  });
+                }}  
+                searchText={'Search'}
+                cancelText={'Cancel'}
+                style={styles.fullWidthInput}
+                initValueTextStyle={styles.initValueTextStyle}
+                searchStyle={styles.searchStyle}
+                selectStyle={styles.selectStyle1}
+                selectTextStyle={styles.selectTextStyle}
+                sectionTextStyle={styles.sectionTextStyle}
+                cancelStyle={styles.cancelStyle}
+                cancelTextStyle={styles.cancelTextStyle}
+                overlayStyle={styles.overlayStyle}
+              />
+              :
+              <ModalSelector
+                disabled={true}
+                initValue="Select City"
+                searchText={'Search'}
+                cancelText={'Cancel'}
+                style={styles.disabledFullWidthInput}
+                initValueTextStyle={styles.initValueTextStyle}
+                searchStyle={styles.searchStyle}
+                selectStyle={styles.disabledSelectStyle}
+                selectTextStyle={styles.selectTextStyle}
+                sectionTextStyle={styles.sectionTextStyle}
+                cancelStyle={styles.cancelStyle}
+                cancelTextStyle={styles.cancelTextStyle}
+                overlayStyle={styles.overlayStyle}
+                touchableActiveOpacity={styles.touchableActiveOpacity}
+              />
             }
           </View>
-          
-        </ScrollView>
+
+          {/* Barangay */}
+          <View style={[styles.inputContainer, styles.marginTop]}>
+            { booking.dropoffCity !== '' ? 
+              <ModalSelector
+                data={this.state.barangayList}
+                keyExtractor= {barangay => barangay.code}
+                labelExtractor= {barangay => barangay.name}
+                initValue="Select Barangay"
+                onChange={(barangay) => {
+                  booking.dropoffBarangay = barangay.name;
+                  this.setState({booking});
+                }} 
+                searchText={'Search'}
+                cancelText={'Cancel'}
+                style={styles.fullWidthInput}
+                initValueTextStyle={styles.initValueTextStyle}
+                searchStyle={styles.searchStyle}
+                selectStyle={styles.selectStyle1}
+                selectTextStyle={styles.selectTextStyle}
+                sectionTextStyle={styles.sectionTextStyle}
+                cancelStyle={styles.cancelStyle}
+                cancelTextStyle={styles.cancelTextStyle}
+                overlayStyle={styles.overlayStyle}
+              />
+              :
+              <ModalSelector
+                disabled={true}
+                initValue="Select Barangay"
+                searchText={'Search'}
+                cancelText={'Cancel'}
+                style={styles.disabledFullWidthInput}
+                initValueTextStyle={styles.initValueTextStyle}
+                searchStyle={styles.searchStyle}
+                selectStyle={styles.disabledSelectStyle}
+                selectTextStyle={styles.selectTextStyle}
+                sectionTextStyle={styles.sectionTextStyle}
+                cancelStyle={styles.cancelStyle}
+                cancelTextStyle={styles.cancelTextStyle}
+                overlayStyle={styles.overlayStyle}
+                touchableActiveOpacity={styles.touchableActiveOpacity}
+              />
+            }
+          </View>
+
+            {/* Landmarks */}
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.fullWidthInput, styles.marginTop]}
+                onChangeText={(landmark) => {
+                  booking.dropoffLandmark = landmark;
+                  this.setState({booking})
+                }}
+                placeholder='Landmarks (Optional)'
+                placeholderTextColor={'#808080'}
+              />
+            </View>
+            {/* Special Instruction */}
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.marginTop, styles.specialInstructions]}
+                onChangeText={(specialInstructions) => {
+                  booking.dropoffSpecialInstructions = specialInstructions;
+                  this.setState({booking})
+                }}
+                placeholder='Special Instruction (Optional)'
+                placeholderTextColor={'#808080'}
+                multiline={true}
+                returnKeyType='done'
+                blurOnSubmit={true}
+                onSubmitEditing={()=>{Keyboard.dismiss()}}
+              />
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+
+        <View style={styles.alignItemCenter}>
+        {/* Next Button */}
+          {/* Make button gray when not all inputs are filled out, orange when filled out */}
+          { booking.dropoffStreetAddress == '' || booking.dropoffBarangay == '' || booking.dropoffCity == '' || booking.dropoffProvince == '' || booking.dropoffRegion == '' || booking.dropoffZipcode == '' ?
+          <TouchableOpacity style={styles.nextButtonGray} disabled={true}>
+            <Text style={styles.buttonText}> NEXT </Text>
+          </TouchableOpacity>
+          :
+          <TouchableOpacity style={styles.nextButtonOrange} onPress={() => {
+            this.booking();
+            this.props.navigation.navigate('QuickQuotation4')
+          }}>
+            <Text style={styles.buttonText}> NEXT </Text>
+          </TouchableOpacity>
+          }
+        </View>
+            
       </View>
     )
   }
@@ -258,7 +366,8 @@ const styles = StyleSheet.create({
     shadowColor: '#171717',
     shadowOffset: {height: 5},
     shadowOpacity: 0.3,
-    alignItems: 'center'
+    alignItems: 'center',
+    zIndex: 1
   },
   headerText: {
     color: 'white',
@@ -267,7 +376,8 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
   },
   labelContainer: {
-    marginTop: '5%',
+    marginTop: '7%',
+    marginBottom: '3%',
     marginLeft: '6%'
   },
   labelText: {
@@ -277,11 +387,13 @@ const styles = StyleSheet.create({
   inputContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 0
   },
   alignItemCenter: {
     alignItems: 'center',
     zIndex: 0
+  },
+  zIndex: {
+    zIndex: 1
   },
   row: {
     flexDirection: 'row',
@@ -292,23 +404,23 @@ const styles = StyleSheet.create({
   marginRight: {
     marginRight: '2%'
   },
-  dateInput: {
-    backgroundColor: 'white',
-    width: '59%',
-    marginRight: 7,
-    height: 50,
-    borderTopLeftRadius: 25,
-    borderBottomLeftRadius: 25,
-    paddingLeft: '5%'
-  },
-  timeInput: {
-    backgroundColor: 'white',
-    width: '29%',
-    height: 50,
-    borderTopRightRadius: 25,
-    borderBottomRightRadius: 25,
-    textAlign: 'center'
-  },
+  // dateInput: {
+  //   backgroundColor: 'white',
+  //   width: '59%',
+  //   marginRight: 7,
+  //   height: 50,
+  //   borderTopLeftRadius: 25,
+  //   borderBottomLeftRadius: 25,
+  //   paddingLeft: '5%'
+  // },
+  // timeInput: {
+  //   backgroundColor: 'white',
+  //   width: '29%',
+  //   height: 50,
+  //   borderTopRightRadius: 25,
+  //   borderBottomRightRadius: 25,
+  //   textAlign: 'center'
+  // },
   fullWidthInput: {
     backgroundColor: 'white',
     width: '90%',
@@ -316,27 +428,30 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingLeft: '5%'
   },
+  regionInput: {
+    width: '62%',
+  },
   zipInput: {
     backgroundColor: 'white',
-    width: '30%',
+    width: '25%',
     height: 50,
     borderRadius: 25,
     textAlign: 'center',
     marginLeft: '3%'
   },
-  barangayInput: {
-    width: '43%',
-  },
-  cityInput: {
-    width: '43%',
-    marginLeft: '3%'
-  },
-  provinceInput: {
-    width: '56%',
+  specialInstructions: {
+    backgroundColor: 'white',
+    width: '90%',
+    height: 90,
+    borderRadius: 25,
+    paddingRight: '5%',
+    paddingLeft: '5%',
+    paddingTop: '5%',
+    marginBottom: '15%'
   },
   initValueTextStyle: {
     fontSize: 14,
-    color: "#C3C3C3"
+    color: "#808080"
   },
   searchStyle: {
     borderColor: 'black',
@@ -351,7 +466,6 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    paddingLeft: '10%'
   },
   selectStyle2: {
     backgroundColor: 'white',
@@ -361,7 +475,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    paddingLeft: '8%'
+    paddingLeft: '10%'
   },
   selectTextStyle: {
     fontSize: 14,
@@ -386,6 +500,22 @@ const styles = StyleSheet.create({
     padding: '5%', 
     justifyContent: 'center', 
     backgroundColor: 'rgba(0,0,0,0.7)' 
+  },
+  disabledFullWidthInput: {
+    backgroundColor: 'rgb(222, 223, 228)',
+    width: '90%',
+    height: 50,
+    borderRadius: 25,
+    paddingLeft: '5%'
+  },
+  disabledSelectStyle: {
+    backgroundColor: 'rgb(222, 223, 228)',
+    width: '100%',
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 0,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   nextButtonGray: {
     marginTop: '5%',

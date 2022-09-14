@@ -1,9 +1,9 @@
 import React, { Component }  from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image, Modal, TouchableWithoutFeedback } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners'
 import Constants from 'expo-constants';
 
-import { AuthenticationApi } from '../../api/authentication'; 
+import { CustomerApi } from '../../api/customer'; 
 import { getStorage, setStorage } from '../../api/helper/storage';
 
 const bgImage = '../../assets/bg-image.png';
@@ -14,7 +14,8 @@ export default class Home extends Component {
     
     this.state = { 
       balance: '00.00',
-      user: []
+      user: [],
+      modalVisible: false
     };
   }
 
@@ -29,12 +30,17 @@ export default class Home extends Component {
 
   async logOut() {
     let user = await getStorage('user');
-    await AuthenticationApi.logout(user.refresh);
+    await CustomerApi.logout(user.refresh);
     this.props.navigation.navigate('Login');
     EventRegister.emit('logout', true);
   }
 
+  setModalVisible = (visible) => {
+    this.setState({ modalVisible: visible });
+  }
+
   render() {
+    const { modalVisible } = this.state;
     return(
       <View style={styles.container}>
         <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
@@ -43,16 +49,62 @@ export default class Home extends Component {
             {/* Header */}
             <View style={styles.header}>
               <View style={styles.headerSpacing}>
+                {/* Side Menu Bar */}
+                <TouchableOpacity onPress={() => { alert('Side Menu') }}>
+                  <Image 
+                    source={require('../../assets/icons/sideMenu.png')}
+                    style={styles.sideMenuIcon}
+                  />
+                </TouchableOpacity>
+                {/* Logo */}
                 <Image
                   source={require('../../assets/logo/logo.png')}
                   style={styles.logo}
                 />
-                {/* Button */}
-                <TouchableOpacity style={styles.logOutButton} onPress={() => this.logOut() }>
-                  <Text style={styles.buttonText}>Log Out</Text>
+                {/* Headset Icon */}
+                <TouchableOpacity onPress={() => this.logOut()}>
+                  <Image 
+                    source={require('../../assets/icons/headset.png')}
+                    style={styles.headsetIcon}
+                  />
                 </TouchableOpacity>
               </View>
             </View>
+
+            {/* Modal */}
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => this.setState({modalVisible: false}) }
+            >
+              <TouchableWithoutFeedback onPress={() => this.setState({modalVisible: false}) }>
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                    <View style={styles.modalRow}>
+                      <TouchableOpacity style={styles.alignItemCenter}
+                        onPress={() => this.setState({modalVisible: false}, () => {
+                          alert('Exclusive')
+                      })}>
+                        <Image source={require('../../assets/truck/exclusive.png')} style={styles.exclusiveTruck}/>
+                        <View style={[styles.button, styles.modalButton]}>
+                          <Text style={styles.textStyle}>Exclusive</Text>
+                        </View>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.alignItemCenter}
+                        onPress={() => this.setState({modalVisible: false}, () => {
+                          alert('Shared')
+                      })}>
+                        <Image source={require('../../assets/truck/shared.png')} style={styles.sharedTruck}/>
+                        <View style={[styles.button, styles.modalButton]}>
+                          <Text style={styles.textStyle}>Shared</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              </TouchableWithoutFeedback>
+            </Modal>
 
             <View style={styles.content}>
 
@@ -95,7 +147,7 @@ export default class Home extends Component {
 
               {/* Booking Button */}
               <View style={styles.alignItemCenter}>
-                <TouchableOpacity style={styles.bookingButton}>
+                <TouchableOpacity style={styles.bookingButton} onPress={() => this.setModalVisible(true)}>
                   <Text style={styles.bookingButtonText}> Book </Text>
                 </TouchableOpacity>
               </View>
@@ -132,7 +184,7 @@ const styles = StyleSheet.create({
   headerSpacing: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
   },
   logo: {
     height: 20,
@@ -140,22 +192,17 @@ const styles = StyleSheet.create({
     marginTop: '2%',
     marginBottom: '3%',
   },
-  logOutButton: {
-    height: 28,
-    width: '17%',
-    borderRadius: 10,
-    justifyContent:'center',
-    alignItems: 'center',
-    backgroundColor: 'rgb(223,131,68)',
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 6},
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
-    marginLeft: '19%',
-    marginRight: '2%',
-    marginBottom: '1%',
+  sideMenuIcon: {
+    height: 15,
+    width: 20,
+    marginLeft: 15
   },
-  buttonText: {
+  headsetIcon: {
+    height: 20,
+    width: 20,
+    marginRight: 15
+  },
+    buttonText: {
     color: 'white',
     fontSize: 13,
     fontWeight:'bold'
@@ -230,5 +277,54 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingTop: '3%',
     paddingBottom: '3%'
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginBottom: "45%"
+  },
+  modalRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    margin: 15,
+    marginBottom: -10
+  },
+  modalButton: {
+    backgroundColor: "rgb(223,131,68)",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 15
+  },
+  exclusiveTruck: {
+    width: 100,
+    height: 45
+  },
+  sharedTruck: {
+    width: 90,
+    height: 45
+  },
 })

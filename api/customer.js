@@ -1,8 +1,20 @@
-import { getStorage, setStorage } from '../api/helper/storage';
+import { Request } from './helper/http'
+import { getStorage, setStorage } from './helper/storage';
 
-const API_URL = 'http://18.140.182.54/api/customers/register';
+var request = new Request;
 
-export class RegistrationApi {
+export class CustomerApi {
+  static login(username, password) {
+    return request.post('customers/login', { username, password });
+  }
+
+  static async logout(refresh) {
+    await setStorage('user', null);
+    await setStorage('remember', null)
+    await setStorage('loginInfo', null);
+    return request.post('logout', {refresh});
+  }
+
   static async individual() {
     let register = await getStorage('register');
     let formdata = new FormData();

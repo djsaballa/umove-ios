@@ -1,10 +1,10 @@
 import React, { Component }  from 'react';
-import { StyleSheet, View, ImageBackground, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, View, ImageBackground, Image, Text, TextInput, Modal, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Constants from 'expo-constants';
 import { EventRegister } from 'react-native-event-listeners'
 import { CheckBox } from 'react-native-elements';
 
-import { AuthenticationApi } from '../../api/authentication'; 
+import { CustomerApi } from '../../api/customer'; 
 import { getStorage, setStorage } from '../../api/helper/storage';
 
 const bgImage = '../../assets/bg-image.png';
@@ -18,6 +18,7 @@ export default class Login extends Component {
       password: '', 
       remember: false,
       error: false,
+      modalVisible: false
     };
   }
 
@@ -44,7 +45,7 @@ export default class Login extends Component {
       if(loginInfo) {
         this.setState({username: loginInfo[0]})
         this.setState({password: loginInfo[1]})
-        let [res, err] = await AuthenticationApi.login(loginInfo[0], loginInfo[1]);
+        let [res, err] = await CustomerApi.login(loginInfo[0], loginInfo[1]);
         if(err) {
           this.setState({ error: true });
         }
@@ -63,7 +64,7 @@ export default class Login extends Component {
     let loginInfo = [this.state.username, this.state.password]
     await setStorage('loginInfo', loginInfo)
     
-    let [res, err] = await AuthenticationApi.login(this.state.username, this.state.password);
+    let [res, err] = await CustomerApi.login(this.state.username, this.state.password);
     if(err) {
       this.setState({ error: true });
     }
@@ -83,12 +84,48 @@ export default class Login extends Component {
     }
   }
 
+  setModalVisible = (visible) => {
+    this.setState({ modalVisible: visible });
+  }
+
   render() {
+    const { modalVisible } = this.state;
     return(
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
           <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.bgImage}>
             <View style={styles.innerContainer}>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => this.setState({modalVisible: false}) }
+              >
+                <TouchableWithoutFeedback onPress={() => this.setState({modalVisible: false}) }>
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      <Text style={styles.modalText}>Sign Up as:</Text>
+                      <View style={styles.modalRow}>
+                        <TouchableOpacity
+                          style={[styles.button, styles.modalButton]}
+                          onPress={() => this.setState({modalVisible: false}, () => {
+                            this.props.navigation.navigate('IndivSignUp1')
+                        })}>
+                          <Text style={styles.textStyle}>Individual</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[styles.button, styles.modalButton]}
+                          onPress={() => this.setState({modalVisible: false}, () => {
+                            this.props.navigation.navigate('CorpSignUp1')
+                        })}>                        
+                          <Text style={styles.textStyle}>Corporate</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableWithoutFeedback>
+              </Modal>
 
             {this.state.error ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> Username or Password is incorrect </Text></View> : null}
 
@@ -102,7 +139,7 @@ export default class Login extends Component {
                   />
                 </View>
 
-                {/* username and Password */}
+                {/* Username and Password */}
                 <View style={styles.alignItemCenter}>
                   <View style={styles.inputPart}> 
                     <Text style={styles.text}>
@@ -189,7 +226,7 @@ export default class Login extends Component {
                       <Text style={styles.signUpText}>
                         Don't have an account? {" "}
                       </Text>
-                      <TouchableOpacity onPress={() => this.props.navigation.navigate('IndivSignUp1')}>
+                      <TouchableOpacity onPress={() => this.setModalVisible(true)}>
                         <Text style={styles.underline}>
                           Sign Up
                         </Text>
@@ -332,5 +369,51 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 10,
     color: '#d32f2f'
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  modalRow: {
+    marginTop: '5%',
+    flexDirection: 'row',
+    alignItems: 'center',    
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    margin: 5
+  },
+  modalButton: {
+    backgroundColor: "rgb(223,131,68)",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 15
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 18,
+    fontWeight: 'bold'
   }
 })
