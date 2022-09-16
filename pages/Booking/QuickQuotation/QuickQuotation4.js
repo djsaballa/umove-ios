@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image, Modal, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image } from 'react-native';
 
 const bgImage = '../../../assets/bg-image.png';
 
@@ -9,52 +9,14 @@ export default class QuickQuotation4 extends Component {
     
     this.state = { 
       amount: '00.00',
-      modalVisible: false
     };
   }
 
-  setModalVisible = (visible) => {
-    this.setState({ modalVisible: visible });
-  }
-
   render() {
-    const { modalVisible } = this.state;
     return(
       <View style={styles.container}>
         <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
           <View style={styles.innerContainer}>
-
-          <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => this.setState({modalVisible: false}) }
-              >
-                <TouchableWithoutFeedback onPress={() => this.setState({modalVisible: false}) }>
-                  <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                      <Text style={styles.modalText}>Sign Up as:</Text>
-                      <View style={styles.modalRow}>
-                        <TouchableOpacity
-                          style={[styles.button, styles.modalButton]}
-                          onPress={() => this.setState({modalVisible: false}, () => {
-                            this.props.navigation.navigate('IndivSignUp1')
-                        })}>
-                          <Text style={styles.textStyle}>Individual</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={[styles.button, styles.modalButton]}
-                          onPress={() => this.setState({modalVisible: false}, () => {
-                            this.props.navigation.navigate('CorpSignUp1')
-                        })}>                        
-                          <Text style={styles.textStyle}>Corporate</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableWithoutFeedback>
-              </Modal>
-
             <View style={styles.content}>
 
               {/* Logo */}
@@ -108,8 +70,8 @@ export default class QuickQuotation4 extends Component {
                   <TouchableOpacity style={styles.loginButton} onPress={() => this.props.navigation.navigate('Login')}>
                     <Text style={styles.buttonText}>Login</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.signupButton} onPress={() => this.setModalVisible(true)}>
-                    <Text style={styles.buttonText}>Sign Up</Text>
+                  <TouchableOpacity style={styles.signupButton} onPress={() => this.props.navigation.navigate('Start')}>
+                    <Text style={styles.buttonText}>Cancel</Text>
                   </TouchableOpacity>
                 </View>
               </View>
