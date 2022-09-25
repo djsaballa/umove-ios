@@ -22,6 +22,10 @@ import QuickQuotation1 from './pages/Booking/QuickQuotation/QuickQuotation1';
 import QuickQuotation2 from './pages/Booking/QuickQuotation/QuickQuotation2';
 import QuickQuotation3 from './pages/Booking/QuickQuotation/QuickQuotation3';
 import QuickQuotation4 from './pages/Booking/QuickQuotation/QuickQuotation4';
+import Exclusive1 from './pages/Booking/Exclusive/Exclusive1';
+import Exclusive2 from './pages/Booking/Exclusive/Exclusive2';
+import Exclusive3 from './pages/Booking/Exclusive/Exclusive3';
+import Exclusive4 from './pages/Booking/Exclusive/Exclusive4';
 import Dashboard from './pages/Dashboard';
 import Booking from './pages/Booking/Booking';
 
@@ -40,7 +44,7 @@ export default class App extends Component{
     // put pages in the Stack for the Navigation
     <NavigationContainer>
         <StatusBar style="light" />
-        <Stack.Navigator initialRouteName="Landing" screenOptions={{headerShown: false}}>
+        <Stack.Navigator initialRouteName="Exclusive4" screenOptions={{headerShown: false}}>
           <Stack.Screen name="Landing" component={Landing} />
           <Stack.Screen name="Start" component={Start} options={{ cardStyleInterpolator: forFade, gestureEnabled: false }} />
           <Stack.Screen name="Login" component={Login} />
@@ -60,6 +64,10 @@ export default class App extends Component{
           <Stack.Screen name="QuickQuotation2" component={QuickQuotation2} />
           <Stack.Screen name="QuickQuotation3" component={QuickQuotation3} />
           <Stack.Screen name="QuickQuotation4" component={QuickQuotation4} />
+          <Stack.Screen name="Exclusive1" component={Exclusive1} />
+          <Stack.Screen name="Exclusive2" component={Exclusive2} />
+          <Stack.Screen name="Exclusive3" component={Exclusive3} />
+          <Stack.Screen name="Exclusive4" component={Exclusive4} />
           <Stack.Screen name="Booking" component={Booking} />
           <Stack.Screen name="Dashboard" component={Dashboard} options={{ gestureEnabled: false }}/>
         </Stack.Navigator>

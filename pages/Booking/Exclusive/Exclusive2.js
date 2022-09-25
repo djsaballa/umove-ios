@@ -6,7 +6,7 @@ import ModalSelector from 'react-native-modal-selector-searchable'
 import { FetchApi } from '../../../api/fetch';
 import { getStorage, setStorage } from '../../../api/helper/storage';
 
-export default class QuickQuotation3 extends Component {  
+export default class Exclusive2 extends Component {  
   constructor(props) {
     super(props);
     
@@ -79,10 +79,10 @@ export default class QuickQuotation3 extends Component {
     return(
       <View style={styles.container}>
 
-        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={-50}>
+        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={20}>
             {/* Header for Delivery Address */}
-            <View style={styles.header}>
-              <TouchableOpacity style={styles.arrowContainer} onPress={() => { this.props.navigation.navigate('QuickQuotation2') }}>
+            <View style={[styles.header, styles.row]}>
+              <TouchableOpacity style={styles.arrowContainer} onPress={() => { this.props.navigation.navigate('Exclusive1') }}>
                 <Image
                   source={require('../../../assets/icons/arrow-back.png')}
                   style={styles.headerArrow}
@@ -94,31 +94,37 @@ export default class QuickQuotation3 extends Component {
           <ScrollView>
 
             <View style={styles.labelContainer}>
-              <Text style={styles.labelText}> Drop Off Details </Text>
+              <Text style={styles.labelText}> Pick Up Details </Text>
             </View>
 
             {/* Date and Time */}
-            {/* <View style={[styles.inputContainer, styles.row, styles.marginTop]}>
+            <View style={[styles.inputContainer, styles.row, styles.marginTop]}>
               <TextInput
                 style={styles.dateInput}
-                onChangeText={(date) => {this.setState({date})}}
+                onChangeText={(date) => {
+                  booking.pickupDate = date;
+                  this.setState({ booking })
+                }}
                 placeholder='March 22, 2022'
                 placeholderTextColor={'#808080'}
               />
               <TextInput
                 style={styles.timeInput}
-                onChangeText={(time) => {this.setState({time})}}
+                onChangeText={(time) => {
+                  booking.pickupTime = time;
+                  this.setState({ booking })
+                }}
                 placeholder='ASAP'
                 placeholderTextColor={'#808080'}
               />
-            </View> */}
+            </View>
 
             <View style={styles.inputContainer}>
               {/* Street Address */}
               <TextInput
                 style={[styles.fullWidthInput, styles.marginTop]}
                 onChangeText={(streetAddress) => {
-                  booking.dropoffStreetAddress = streetAddress;
+                  booking.pickupStreetAddress = streetAddress;
                   this.setState({ booking })
                 }}
                 placeholder='House No., Lot, Street'
@@ -134,7 +140,7 @@ export default class QuickQuotation3 extends Component {
                 labelExtractor= {region => region.name}
                 initValue="Select Region"
                 onChange={(region) => {
-                  booking.dropoffRegion = region.name;
+                  booking.pickupRegion = region.name;
                   this.setState({booking}, async () => {
                     await this.loadProvince(region.code);
                   });
@@ -156,7 +162,7 @@ export default class QuickQuotation3 extends Component {
               <TextInput
                   style={[styles.zipInput]}
                   onChangeText={(val) => {
-                    booking.dropoffZipcode = val;
+                    booking.pickupZipcode = val;
                     this.setState({booking})
                   }}  
                   placeholder='ZIP Code'
@@ -168,14 +174,14 @@ export default class QuickQuotation3 extends Component {
             </View>
             {/* Province */}
             <View style={[styles.inputContainer, styles.marginTop, styles.row]}>
-              { booking.dropoffRegion !== '' ? 
+              { booking.pickupRegion !== '' ? 
               <ModalSelector
                 data={this.state.provinceList}
                 keyExtractor= {province => province.code}
                 labelExtractor= {province => province.name}
                 initValue="Select Province"
                 onChange={(province) => {
-                  booking.dropoffProvince = province.name;
+                  booking.pickupProvince = province.name;
                   this.setState({booking}, async () => {
                     await this.loadCity(province.code);
                   });
@@ -216,14 +222,14 @@ export default class QuickQuotation3 extends Component {
 
           {/* City */}
           <View style={[styles.inputContainer, styles.marginTop]}>
-            { booking.dropoffProvince !== '' ?
+            { booking.pickupProvince !== '' ?
               <ModalSelector
                 data={this.state.cityList}
                 keyExtractor= {city => city.code}
                 labelExtractor= {city => city.name}
                 initValue="Select City"
                 onChange={(city) => {
-                  booking.dropoffCity = city.name;
+                  booking.pickupCity = city.name;
                   this.setState({booking}, async () => {
                     await this.loadBarangay(city.code);
                   });
@@ -262,14 +268,14 @@ export default class QuickQuotation3 extends Component {
 
           {/* Barangay */}
           <View style={[styles.inputContainer, styles.marginTop]}>
-            { booking.dropoffCity !== '' ? 
+            { booking.pickupCity !== '' ? 
               <ModalSelector
                 data={this.state.barangayList}
                 keyExtractor= {barangay => barangay.code}
                 labelExtractor= {barangay => barangay.name}
                 initValue="Select Barangay"
                 onChange={(barangay) => {
-                  booking.dropoffBarangay = barangay.name;
+                  booking.pickupBarangay = barangay.name;
                   this.setState({booking});
                 }} 
                 searchText={'Search'}
@@ -309,7 +315,7 @@ export default class QuickQuotation3 extends Component {
               <TextInput
                 style={[styles.fullWidthInput, styles.marginTop]}
                 onChangeText={(landmark) => {
-                  booking.dropoffLandmark = landmark;
+                  booking.pickupLandmark = landmark;
                   this.setState({booking})
                 }}
                 placeholder='Landmarks (Optional)'
@@ -321,7 +327,7 @@ export default class QuickQuotation3 extends Component {
               <TextInput
                 style={[styles.marginTop, styles.specialInstructions]}
                 onChangeText={(specialInstructions) => {
-                  booking.dropoffSpecialInstructions = specialInstructions;
+                  booking.pickupSpecialInstructions = specialInstructions;
                   this.setState({booking})
                 }}
                 placeholder='Special Instruction (Optional)'
@@ -336,16 +342,21 @@ export default class QuickQuotation3 extends Component {
         </KeyboardAvoidingView>
 
         <View style={styles.alignItemCenter}>
-        {/* Next Button */}
-          {/* Make button gray when not all inputs are filled out, orange when filled out */}
-          { booking.dropoffStreetAddress == '' || booking.dropoffBarangay == '' || booking.dropoffCity == '' || booking.dropoffProvince == '' || booking.dropoffRegion == '' || booking.dropoffZipcode == '' ?
+          {/* Select from Saved Addresses */}
+          <TouchableOpacity style={styles.nextButtonOrange} onPress={() => { alert('Saved Addresses') }}>
+              <Text style={styles.buttonText}> Select from Saved Addresses </Text>
+          </TouchableOpacity>
+          
+          {/* Next Button */}
+            {/* Make button gray when not all inputs are filled out, orange when filled out */}
+          { booking.pickupDate == '' || booking.pickupTime == '' || booking.pickupStreetAddress == '' || booking.pickupBarangay == '' || booking.pickupCity == '' || booking.pickupProvince == '' || booking.pickupRegion == '' || booking.pickupZipcode == '' ?
           <TouchableOpacity style={styles.nextButtonGray} disabled={true}>
             <Text style={styles.buttonText}> NEXT </Text>
           </TouchableOpacity>
           :
           <TouchableOpacity style={styles.nextButtonOrange} onPress={() => {
             this.booking();
-            this.props.navigation.navigate('QuickQuotation4')
+            this.props.navigation.navigate('Exclusive3')
           }}>
             <Text style={styles.buttonText}> NEXT </Text>
           </TouchableOpacity>
@@ -373,6 +384,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 1
   },
+  headerText: {
+    color: 'white',
+    fontSize: 20,
+    marginTop: '5%',
+    marginBottom: '5%',
+  },
   arrowContainer: {
     marginLeft: '3%',
     marginRight: '26%'
@@ -380,12 +397,6 @@ const styles = StyleSheet.create({
   headerArrow: {
     width: 12,
     height: 20,
-  },
-  headerText: {
-    color: 'white',
-    fontSize: 20,
-    marginTop: '5%',
-    marginBottom: '5%',
   },
   labelContainer: {
     marginTop: '7%',
@@ -416,23 +427,23 @@ const styles = StyleSheet.create({
   marginRight: {
     marginRight: '2%'
   },
-  // dateInput: {
-  //   backgroundColor: 'white',
-  //   width: '59%',
-  //   marginRight: 7,
-  //   height: 50,
-  //   borderTopLeftRadius: 25,
-  //   borderBottomLeftRadius: 25,
-  //   paddingLeft: '5%'
-  // },
-  // timeInput: {
-  //   backgroundColor: 'white',
-  //   width: '29%',
-  //   height: 50,
-  //   borderTopRightRadius: 25,
-  //   borderBottomRightRadius: 25,
-  //   textAlign: 'center'
-  // },
+  dateInput: {
+    backgroundColor: 'white',
+    width: '59%',
+    marginRight: 7,
+    height: 50,
+    borderTopLeftRadius: 25,
+    borderBottomLeftRadius: 25,
+    paddingLeft: '5%'
+  },
+  timeInput: {
+    backgroundColor: 'white',
+    width: '29%',
+    height: 50,
+    borderTopRightRadius: 25,
+    borderBottomRightRadius: 25,
+    textAlign: 'center'
+  },
   fullWidthInput: {
     backgroundColor: 'white',
     width: '90%',
@@ -459,7 +470,6 @@ const styles = StyleSheet.create({
     paddingRight: '5%',
     paddingLeft: '5%',
     paddingTop: '5%',
-    marginBottom: '15%'
   },
   initValueTextStyle: {
     fontSize: 14,

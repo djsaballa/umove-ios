@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Keyboard } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Keyboard, Image, Touchable } from 'react-native';
 import Constants from 'expo-constants';
 import ModalSelector from 'react-native-modal-selector-searchable'
 
@@ -32,8 +32,6 @@ export default class QuickQuotation2 extends Component {
   async booking() {
     let booking = this.state.booking;
     await setStorage('booking', booking)
-    let book = await getStorage('booking')
-    console.log(book)
   }
 
   async loadRegion() {
@@ -83,7 +81,13 @@ export default class QuickQuotation2 extends Component {
 
         <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={-50}>
             {/* Header for Delivery Address */}
-            <View style={styles.header}>
+            <View style={[styles.header, styles.row]}>
+              <TouchableOpacity style={styles.arrowContainer} onPress={() => { this.props.navigation.navigate('QuickQuotation1') }}>
+                <Image
+                  source={require('../../../assets/icons/arrow-back.png')}
+                  style={styles.headerArrow}
+                />
+              </TouchableOpacity>
               <Text style={styles.headerText}>Delivery Address</Text>
             </View>
 
@@ -374,6 +378,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: '5%',
     marginBottom: '5%',
+  },
+  arrowContainer: {
+    marginLeft: '3%',
+    marginRight: '26%'
+  },
+  headerArrow: {
+    width: 12,
+    height: 20,
   },
   labelContainer: {
     marginTop: '7%',

@@ -6,7 +6,7 @@ import ModalSelector from 'react-native-modal-selector-searchable'
 import { FetchApi } from '../../../api/fetch';
 import { getStorage, setStorage } from '../../../api/helper/storage';
 
-export default class QuickQuotation3 extends Component {  
+export default class Exclusive3 extends Component {  
   constructor(props) {
     super(props);
     
@@ -79,10 +79,10 @@ export default class QuickQuotation3 extends Component {
     return(
       <View style={styles.container}>
 
-        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={-50}>
+        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={20}>
             {/* Header for Delivery Address */}
             <View style={styles.header}>
-              <TouchableOpacity style={styles.arrowContainer} onPress={() => { this.props.navigation.navigate('QuickQuotation2') }}>
+              <TouchableOpacity style={styles.arrowContainer} onPress={() => { this.props.navigation.navigate('Exclusive2') }}>
                 <Image
                   source={require('../../../assets/icons/arrow-back.png')}
                   style={styles.headerArrow}
@@ -98,20 +98,26 @@ export default class QuickQuotation3 extends Component {
             </View>
 
             {/* Date and Time */}
-            {/* <View style={[styles.inputContainer, styles.row, styles.marginTop]}>
+            <View style={[styles.inputContainer, styles.row, styles.marginTop]}>
               <TextInput
                 style={styles.dateInput}
-                onChangeText={(date) => {this.setState({date})}}
+                onChangeText={(date) => {
+                  booking.dropoffDate = date;
+                  this.setState({ booking })
+                }}
                 placeholder='March 22, 2022'
                 placeholderTextColor={'#808080'}
               />
               <TextInput
                 style={styles.timeInput}
-                onChangeText={(time) => {this.setState({time})}}
+                onChangeText={(time) => {
+                  booking.dropoffTime = time;
+                  this.setState({ booking })
+                }}
                 placeholder='ASAP'
                 placeholderTextColor={'#808080'}
               />
-            </View> */}
+            </View>
 
             <View style={styles.inputContainer}>
               {/* Street Address */}
@@ -336,8 +342,12 @@ export default class QuickQuotation3 extends Component {
         </KeyboardAvoidingView>
 
         <View style={styles.alignItemCenter}>
-        {/* Next Button */}
-          {/* Make button gray when not all inputs are filled out, orange when filled out */}
+          {/* Select from Saved Addresses */}
+          <TouchableOpacity style={styles.nextButtonOrange} onPress={() => { alert('Saved Addresses') }}>
+              <Text style={styles.buttonText}> Select from Saved Addresses </Text>
+          </TouchableOpacity>
+          {/* Next Button */}
+            {/* Make button gray when not all inputs are filled out, orange when filled out */}
           { booking.dropoffStreetAddress == '' || booking.dropoffBarangay == '' || booking.dropoffCity == '' || booking.dropoffProvince == '' || booking.dropoffRegion == '' || booking.dropoffZipcode == '' ?
           <TouchableOpacity style={styles.nextButtonGray} disabled={true}>
             <Text style={styles.buttonText}> NEXT </Text>
@@ -345,7 +355,7 @@ export default class QuickQuotation3 extends Component {
           :
           <TouchableOpacity style={styles.nextButtonOrange} onPress={() => {
             this.booking();
-            this.props.navigation.navigate('QuickQuotation4')
+            this.props.navigation.navigate('Exclusive4')
           }}>
             <Text style={styles.buttonText}> NEXT </Text>
           </TouchableOpacity>
@@ -416,23 +426,23 @@ const styles = StyleSheet.create({
   marginRight: {
     marginRight: '2%'
   },
-  // dateInput: {
-  //   backgroundColor: 'white',
-  //   width: '59%',
-  //   marginRight: 7,
-  //   height: 50,
-  //   borderTopLeftRadius: 25,
-  //   borderBottomLeftRadius: 25,
-  //   paddingLeft: '5%'
-  // },
-  // timeInput: {
-  //   backgroundColor: 'white',
-  //   width: '29%',
-  //   height: 50,
-  //   borderTopRightRadius: 25,
-  //   borderBottomRightRadius: 25,
-  //   textAlign: 'center'
-  // },
+  dateInput: {
+    backgroundColor: 'white',
+    width: '59%',
+    marginRight: 7,
+    height: 50,
+    borderTopLeftRadius: 25,
+    borderBottomLeftRadius: 25,
+    paddingLeft: '5%'
+  },
+  timeInput: {
+    backgroundColor: 'white',
+    width: '29%',
+    height: 50,
+    borderTopRightRadius: 25,
+    borderBottomRightRadius: 25,
+    textAlign: 'center'
+  },
   fullWidthInput: {
     backgroundColor: 'white',
     width: '90%',

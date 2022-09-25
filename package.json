@@ -34,7 +34,8 @@
     "react-native-modal-selector-searchable": "^2.1.4",
     "react-native-otp-forminput": "^1.0.0",
     "react-native-otp-inputs": "^7.4.0",
-    "react-native-web": "0.17.7"
+    "react-native-web": "0.17.7",
+    "@react-native-community/datetimepicker": "6.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

@@ -7,7 +7,7 @@ import { getStorage, setStorage } from '../../../api/helper/storage';
 
 var deviceWidth = Dimensions.get('window').width
 
-export default class QuickQuotation1 extends Component {  
+export default class Exclusive1 extends Component {  
   constructor(props) {
     super(props);
     
@@ -20,6 +20,8 @@ export default class QuickQuotation1 extends Component {
         weight: '',
         packagingType: '',
         pickupStreetAddress: '',
+        pickupDate: '',
+        pickupTime: '',
         pickupRegion: '',
         pickupProvince: '',
         pickupCity: '',
@@ -27,6 +29,8 @@ export default class QuickQuotation1 extends Component {
         pickupZipcode: '',
         pickupLandmark: '',
         pickupSpecialInstructions: '',
+        dropoffDate: '',
+        dropoffTime: '',
         dropoffStreetAddress: '',
         dropoffRegion: '',
         dropoffProvince: '',
@@ -85,7 +89,7 @@ export default class QuickQuotation1 extends Component {
 
           {/* Header for Quick Quotation */}
           <View style={[styles.header, styles.justifyContent]}>
-            <Text style={styles.label}>Quick Quotation</Text>
+            <Text style={styles.label}>Exclusive Booking</Text>
           </View>
 
             {/* Dropdown for Type of Goods */}
@@ -243,7 +247,7 @@ export default class QuickQuotation1 extends Component {
             :
             <TouchableOpacity style={styles.nextButtonOrange} onPress={() => {
               this.booking();
-              this.props.navigation.navigate('QuickQuotation2')
+              this.props.navigation.navigate('Exclusive2')
             }}>
               <Text style={styles.buttonText}> NEXT </Text>
             </TouchableOpacity>
