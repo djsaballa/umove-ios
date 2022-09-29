@@ -35,7 +35,7 @@ export default class Exclusive4 extends Component {
     return(
       <View style={styles.container}>
 
-        {/* Header for Delivery Address */}
+        {/* Header for Booking Summary */}
         <View style={[styles.header, styles.row]}>
           <TouchableOpacity style={styles.arrowContainer} onPress={() => { this.props.navigation.navigate('Exclusive3') }}>
             <Image
@@ -43,31 +43,10 @@ export default class Exclusive4 extends Component {
               style={styles.headerArrow}
             />
           </TouchableOpacity>
-          <Text style={styles.headerText}>Available Trucks</Text>
+          <Text style={styles.headerText}>Booking Summary</Text>
         </View>
 
-        <ScrollView contentContainerStyle={styles.scrollView}>
-          <View style={[styles.selectTruckContainer, styles.row]}>
-            <View>
-              <Text style={styles.selectTruckText}> Image </Text>
-            </View>
-            <View>
-              <View style={styles.selectTruckPrice}>
-                <Text style={styles.selectTruckText}> Price </Text>
-              </View>
-              <View style={styles.selectTruckType}>
-                <Text style={styles.selectTruckText}> Vehicle Type </Text>
-              </View>
-            </View>
-            <View>
-              <TouchableOpacity style={styles.selectTruckButton}>
-                <Text style={styles.selectTruckButtonText}>Select</Text> 
-              </TouchableOpacity>
-            </View>
-          </View>
-
-
-        </ScrollView>
+        
 
         <View style={styles.alignItemCenter}>
           {/* Next Button */}
@@ -115,7 +94,7 @@ const styles = StyleSheet.create({
   },
   arrowContainer: {
     marginLeft: '3%',
-    marginRight: '26%'
+    marginRight: '24%'
   },
   headerArrow: {
     width: 12,
@@ -141,48 +120,8 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
   },
-  scrollView: {
-    justifyContent:'center',
-    alignItems: 'center',
-  },
-  selectTruckContainer: {
-    backgroundColor: 'rgb(58, 64, 77)',
-    marginTop: '2%',
-    marginBottom: '2%',
-    height: 100,
-    width: '90%',
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
-  },
-  selectTruckPrice: {
-    marginBottom: '5%'
-  },
-  selectTruckType: {
-    marginTop: '5%'
-  },
-  selectTruckText: {
-    color: 'white',
-    fontSize: 15,
-    fontWeight: 'bold'
-  },
-  selectTruckButton: {
-    backgroundColor: 'rgb(34, 39, 47)',
-    borderRadius: 5
-  },
-  selectTruckButtonSelected: {
-    backgroundColor: 'rgb(223,131,68)',
-    borderRadius: 5
-  },
-  selectTruckButtonText: {
-    color: 'white',
-    fontSize: 15,
-    fontWeight: 'bold',
-    paddingTop: '2%',
-    paddingRight: '4%',
-    paddingBottom: '2%',
-    paddingLeft: '4%',
-  },
   nextButtonGray: {
+    marginTop: '5%',
     marginBottom: '15%',
     height: 50,
     width: '90%',
@@ -196,6 +135,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   nextButtonOrange: {
+    marginTop: '5%',
     marginBottom: '15%',
     height: 50,
     width: '90%',
