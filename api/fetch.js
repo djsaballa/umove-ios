@@ -22,4 +22,20 @@ export class FetchApi {
   static async barangays(cityCode) {
     return request.get('barangays/' + cityCode);
   }
+
+  static async typesOfGoods() {
+    return request.get('products/types');
+  }
+
+  static async productCategories(productType) {
+    return request.get('products/categories/' + productType);
+  }
+
+  static async productSubcategories(productCategory) {
+    return request.get('products/subcategories/' + productCategory);
+  }
+
+  static async packagingTypes() {
+    return request.get('products/uom');
+  }
 }

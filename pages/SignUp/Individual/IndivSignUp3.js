@@ -5,8 +5,6 @@ import Constants from 'expo-constants';
 import { CustomerApi } from '../../../api/customer'; 
 import { getStorage, setStorage } from '../../../api/helper/storage';
 
-const bgImage = '../../../assets/bg-image.png';
-
 export default class IndivSignUp3 extends Component {  
   constructor() {
     super();
@@ -32,7 +30,7 @@ export default class IndivSignUp3 extends Component {
   async signUp() {
     let register = this.state.register
     await setStorage('register', register)
-    let res = await CustomerApi.individual()
+    let res = await CustomerApi.individualSignup()
     this.setState({message: res}, async () => {
       let response = this.state.message;
       if(register.password.length < 8) {
@@ -68,97 +66,96 @@ export default class IndivSignUp3 extends Component {
     return(
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
-          <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}> 
-            <View style={styles.innerContainer}> 
+          <View style={styles.innerContainer}> 
 
-            {this.state.error1 ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> This password is too short. It must contain at least 8 characters. </Text></View> : null}
-            {this.state.error2 ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> Password and Confirm Password do not match, try again.  </Text></View> : null}
-            {this.state.error3 ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> {response.message.password[0]}  </Text></View> : null}
+          {this.state.error1 ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> This password is too short. It must contain at least 8 characters. </Text></View> : null}
+          {this.state.error2 ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> Password and Confirm Password do not match, try again.  </Text></View> : null}
+          {this.state.error3 ? <View style={styles.errorContainer}><Text style={styles.errorMessage}> {response.message.password[0]}  </Text></View> : null}
 
-              <View style={styles.content}>
+            <View style={styles.content}>
 
-                {/* Logo */}
-                <View style={styles.alignItemCenter}>
-                  <Image
-                    source={require('../../../assets/logo/logo.png')}
-                    style={styles.logo}
+              {/* Logo */}
+              <View style={styles.alignItemCenter}>
+                <Image
+                  source={require('../../../assets/logo/logo-primary.png')}
+                  style={styles.logo}
+                />
+                <Text style={styles.signUpHeader}>Sign Up</Text>
+              </View>
+
+              {/* Sign Up input */}
+              <View style={styles.alignItemCenter}>
+                <View style={styles.inputPart}> 
+                  <Text style={styles.text}>
+                    Password
+                  </Text>
+                  <TextInput
+                    secureTextEntry={true}
+                    style={styles.input}
+                    onChangeText={(val) => {
+                      register.password = val;
+                      this.setState({register})
+                    }}  
                   />
                 </View>
-
-                {/* Sign Up input */}
-                <View style={styles.alignItemCenter}>
-                  <View style={styles.inputPart}> 
-                    <Text style={styles.text}>
-                      Password
-                    </Text>
-                    <TextInput
-                      secureTextEntry={true}
-                      style={styles.input}
-                      onChangeText={(val) => {
-                        register.password = val;
-                        this.setState({register})
-                      }}  
-                    />
-                  </View>
-                  <View style={styles.inputPart}> 
-                    <Text style={styles.text}>
-                      Confirm Password
-                    </Text>
-                    <TextInput
-                      secureTextEntry={true}
-                      style={styles.input}
-                      onChangeText={(val) => {
-                        register.confirmPassword = val;
-                        this.setState({register})
-                      }}   
-                    />
-                  </View>
+                <View style={styles.inputPart}> 
+                  <Text style={styles.text}>
+                    Confirm Password
+                  </Text>
+                  <TextInput
+                    secureTextEntry={true}
+                    style={styles.input}
+                    onChangeText={(val) => {
+                      register.confirmPassword = val;
+                      this.setState({register})
+                    }}   
+                  />
                 </View>
-
-                {/* Terms and Conditions & Privacy Policy */}
-                <View style={styles.alignItemCenter}>
-                  <View style={styles.conditionsContainer}>
-                    <View style={styles.row}>
-                      <Text style={styles.conditionsText}>
-                        By clicking Continue, you agree to our 
-                      </Text>
-                        <TouchableOpacity onPress={() => alert('Terms and Conditions')}>
-                          <Text style={styles.underline}>
-                            {" "} Terms and Conditions {" "}
-                          </Text>
-                        </TouchableOpacity>
-                        <Text style={styles.conditionsText}>
-                        and that you have read our 
-                        </Text>
-                        <TouchableOpacity onPress={() => alert('Privacy Policy')}>
-                          <Text style={styles.underline}>
-                            {" "} Privacy Policy
-                          </Text>
-                        </TouchableOpacity>
-                      <Text style={styles.conditionsText}>
-                        .
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-
-                {/* Continue Button */}
-                <View style={styles.alignItemCenter}>
-                  {/* Make button gray when not all inputs are filled out, orange when filled out */}
-                  { register.password == '' || register.confirmPassword == ''  ?
-                  <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
-                    <Text style={styles.signUpButtonText}>CONTINUE</Text>
-                  </TouchableOpacity>
-                  :
-                  <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.signUp()}>
-                    <Text style={styles.signUpButtonText}>CONTINUE</Text>
-                  </TouchableOpacity>
-                  }
-                </View>
-
               </View>
+
+              {/* Terms and Conditions & Privacy Policy */}
+              <View style={styles.alignItemCenter}>
+                <View style={styles.conditionsContainer}>
+                  <View style={styles.row}>
+                    <Text style={styles.conditionsText}>
+                      By clicking CONTINUE, you agree to our 
+                    </Text>
+                      <TouchableOpacity onPress={() => alert('Terms and Conditions')}>
+                        <Text style={styles.underline}>
+                          {" "} Terms and Conditions {" "}
+                        </Text>
+                      </TouchableOpacity>
+                      <Text style={styles.conditionsText}>
+                      and that you have read our 
+                      </Text>
+                      <TouchableOpacity onPress={() => alert('Privacy Policy')}>
+                        <Text style={styles.underline}>
+                          {" "} Privacy Policy
+                        </Text>
+                      </TouchableOpacity>
+                    <Text style={styles.conditionsText}>
+                      .
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Continue Button */}
+              <View style={styles.alignItemCenter}>
+                {/* Make button gray when not all inputs are filled out, orange when filled out */}
+                { register.password == '' || register.confirmPassword == ''  ?
+                <TouchableOpacity style={styles.signUpButtonGray} disabled={true}>
+                  <Text style={styles.signUpButtonText}>CONTINUE</Text>
+                </TouchableOpacity>
+                :
+                <TouchableOpacity style={styles.signUpButtonOrange} onPress={() => this.signUp()}>
+                  <Text style={styles.signUpButtonText}>CONTINUE</Text>
+                </TouchableOpacity>
+                }
+              </View>
+
             </View>
-          </ImageBackground>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     )
@@ -170,11 +167,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1, 
     justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  image: {
-    flex: 1,
-    justifyContent: 'center',
+    backgroundColor: 'rgb(238, 241, 217)',
   },
   innerContainer: {
     flex: 1,
@@ -187,9 +180,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    height: 50,
-    width: 240,
-    marginBottom: '15%',
+    height: 70,
+    width: 250
+  },
+  signUpHeader: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    letterSpacing: 1,
+    color: 'black',
+    marginTop: '5%',
+    marginBottom: '20%',
   },
   inputPart: {
     margin: 5,
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     paddingLeft: 8,
     paddingBottom: 3,
-    color: 'white'
+    color: 'black'
   }, 
   input: {
     fontSize: 15,
@@ -210,6 +210,8 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     borderRadius: 25,
+    borderColor: 'rgb(223,131,68)',
+    borderWidth: 1,
     backgroundColor: 'white'
   },
   conditionsContainer: {
@@ -223,12 +225,12 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   conditionsText: {
-    color: 'white',
+    color: 'black',
     fontSize: 10,
     alignItems: 'center',
   },
   underline: {
-    color: 'white',
+    color: 'black',
     fontSize: 10,
     textDecorationLine: 'underline',
   },

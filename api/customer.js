@@ -15,7 +15,8 @@ export class CustomerApi {
     return request.post('logout', {refresh});
   }
 
-  static async individual() {
+  static async individualSignup() {
+    let API_URL = 'http://18.140.182.54/api/customers/register';
     let register = await getStorage('register');
     let formdata = new FormData();
 
@@ -49,7 +50,8 @@ export class CustomerApi {
     return res.json()
   }
 
-  static async corporate() {
+  static async corporateSignup() {
+    let API_URL = 'http://18.140.182.54/api/customers/register';
     let register = await getStorage('register');
     let formdata = new FormData();
 

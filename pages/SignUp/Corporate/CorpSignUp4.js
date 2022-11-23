@@ -6,8 +6,6 @@ import ModalSelector from 'react-native-modal-selector-searchable'
 import { FetchApi }  from '../../../api/fetch'
 import { getStorage, setStorage } from '../../../api/helper/storage';
 
-const bgImage = '../../../assets/bg-image.png';
-
 export default class CorpSignUp4 extends Component {  
   constructor(props) {
     super(props);
@@ -81,58 +79,99 @@ export default class CorpSignUp4 extends Component {
     let register = this.state.register;
     return(
       <View style={styles.container}>
-        <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
-          <View style={styles.innerContainer}>
-            <View style={styles.content}>
+        <View style={styles.innerContainer}>
+          <View style={styles.content}>
 
-              <KeyboardAvoidingView behavior='padding'>
-                <ScrollView>
-                  {/* Logo */}
-                  <View style={styles.alignItemCenter}>
-                    <Image
-                      source={require('../../../assets/logo/logo.png')}
-                      style={styles.logo}
-                    />
-                  </View>
+            <KeyboardAvoidingView behavior='padding'>
+              <ScrollView>
+                {/* Logo */}
+                <View style={styles.alignItemCenter}>
+                  <Image
+                    source={require('../../../assets/logo/logo-primary.png')}
+                    style={styles.logo}
+                  />
+                </View>
 
-                  <View style={[styles.inputContainer]}>
-                    {/* Header */}
-                    <Text style={styles.text}>
-                      Office Address
-                    </Text>
+                <View style={[styles.inputContainer]}>
+                  {/* Header */}
+                  <Text style={styles.text}>
+                    Office Address
+                  </Text>
 
-                    {/* Office Street Address */}
-                    <TextInput
-                      style={[styles.fullWidthInput]}
+                  {/* Office Street Address */}
+                  <TextInput
+                    style={[styles.fullWidthInput]}
+                    onChangeText={(val) => {
+                      register.officeAddress = val;
+                      this.setState({register})
+                    }}
+                    placeholder='Building Name, Block, Lot, Street'
+                    placeholderTextColor={'#808080'}
+                  />
+                </View>
+                
+                {/* Region and Zip Code */}
+                <View style={[styles.inputContainer, styles.marginTop, styles.row]}>
+                  {/* Region */}
+                  <ModalSelector
+                    data={this.state.regionList}
+                    keyExtractor= {region => region.code}
+                    labelExtractor= {region => region.name}
+                    initValue="Select Region"
+                    onChange={(region) => {
+                      register.officeRegion = region.name;
+                      this.setState({register}, async () => {
+                        await this.loadProvince(region.code);
+                      });
+                    }}  
+                    searchText={'Search'}
+                    cancelText={'Cancel'}
+                    style={styles.regionInput}
+                    initValueTextStyle={styles.initValueTextStyle}
+                    searchStyle={styles.searchStyle}
+                    selectStyle={styles.selectStyle2}
+                    selectTextStyle={styles.selectTextStyle}
+                    sectionTextStyle={styles.sectionTextStyle}
+                    cancelStyle={styles.cancelStyle}
+                    cancelTextStyle={styles.cancelTextStyle}
+                    overlayStyle={styles.overlayStyle}
+                    touchableActiveOpacity={styles.touchableActiveOpacity}
+                  />
+                  {/* ZIP Code */}
+                  <TextInput
+                      style={[styles.zipInput]}
                       onChangeText={(val) => {
-                        register.officeAddress = val;
+                        register.officeZipcode = val;
                         this.setState({register})
-                      }}
-                      placeholder='Building Name, Block, Lot, Street'
-                      placeholderTextColor={'#808080'}
+                      }}  
+                      placeholder='ZIP Code'
+                      placeholderTextColor={'#808080'}                        
+                      keyboardType='number-pad'
+                      returnKeyType='done'
+                      maxLength={4}
                     />
-                  </View>
-                  
-                  {/* Region and Zip Code */}
-                  <View style={[styles.inputContainer, styles.marginTop, styles.row]}>
-                    {/* Region */}
+                </View>
+
+                {/* Province */}
+                <View style={[styles.inputContainer, styles.marginTop, styles.row]}>
+                  { register.officeRegion !== '' ? 
                     <ModalSelector
-                      data={this.state.regionList}
-                      keyExtractor= {region => region.code}
-                      labelExtractor= {region => region.name}
-                      initValue="Select Region"
-                      onChange={(region) => {
-                        register.officeRegion = region.name;
+                      data={this.state.provinceList}
+                      keyExtractor= {province => province.code}
+                      labelExtractor= {province => province.name}
+                      initValue="Select Province"
+                      onChange={(province) => {
+                        register.officeProvince = province.name;
                         this.setState({register}, async () => {
-                          await this.loadProvince(region.code);
+                          await this.loadCity(province.code);
                         });
                       }}  
                       searchText={'Search'}
                       cancelText={'Cancel'}
-                      style={styles.regionInput}
+                      style={styles.fullWidthInput}
                       initValueTextStyle={styles.initValueTextStyle}
                       searchStyle={styles.searchStyle}
-                      selectStyle={styles.selectStyle2}
+                      selectStyle={styles.selectStyle1}
                       selectTextStyle={styles.selectTextStyle}
                       sectionTextStyle={styles.sectionTextStyle}
                       cancelStyle={styles.cancelStyle}
@@ -140,179 +179,136 @@ export default class CorpSignUp4 extends Component {
                       overlayStyle={styles.overlayStyle}
                       touchableActiveOpacity={styles.touchableActiveOpacity}
                     />
-                    {/* ZIP Code */}
-                    <TextInput
-                        style={[styles.zipInput]}
-                        onChangeText={(val) => {
-                          register.officeZipcode = val;
-                          this.setState({register})
-                        }}  
-                        placeholder='ZIP Code'
-                        placeholderTextColor={'#808080'}                        
-                        keyboardType='number-pad'
-                        returnKeyType='done'
-                        maxLength={4}
-                      />
-                  </View>
-
-                  {/* Province */}
-                  <View style={[styles.inputContainer, styles.marginTop, styles.row]}>
-                    { register.officeRegion !== '' ? 
-                      <ModalSelector
-                        data={this.state.provinceList}
-                        keyExtractor= {province => province.code}
-                        labelExtractor= {province => province.name}
-                        initValue="Select Province"
-                        onChange={(province) => {
-                          register.officeProvince = province.name;
-                          this.setState({register}, async () => {
-                            await this.loadCity(province.code);
-                          });
-                        }}  
-                        searchText={'Search'}
-                        cancelText={'Cancel'}
-                        style={styles.fullWidthInput}
-                        initValueTextStyle={styles.initValueTextStyle}
-                        searchStyle={styles.searchStyle}
-                        selectStyle={styles.selectStyle1}
-                        selectTextStyle={styles.selectTextStyle}
-                        sectionTextStyle={styles.sectionTextStyle}
-                        cancelStyle={styles.cancelStyle}
-                        cancelTextStyle={styles.cancelTextStyle}
-                        overlayStyle={styles.overlayStyle}
-                        touchableActiveOpacity={styles.touchableActiveOpacity}
-                      />
-                      :
-                      <ModalSelector
-                        disabled={true}
-                        data={this.state.provinceList}
-                        initValue="Select Province"
-                        searchText={'Search'}
-                        cancelText={'Cancel'}
-                        style={styles.disabledFullWidthInput}
-                        initValueTextStyle={styles.initValueTextStyle}
-                        searchStyle={styles.searchStyle}
-                        selectStyle={styles.disabledSelectStyle}
-                        selectTextStyle={styles.selectTextStyle}
-                        sectionTextStyle={styles.sectionTextStyle}
-                        cancelStyle={styles.cancelStyle}
-                        cancelTextStyle={styles.cancelTextStyle}
-                        overlayStyle={styles.overlayStyle}
-                        touchableActiveOpacity={styles.touchableActiveOpacity}
-                      />
-                    }
-                  </View>
-
-                  {/* City */}
-                  <View style={[styles.inputContainer, styles.marginTop]}>
-                    { register.officeProvince !== '' ?
-                      <ModalSelector
-                        data={this.state.cityList}
-                        keyExtractor= {city => city.code}
-                        labelExtractor= {city => city.name}
-                        initValue="Select City"
-                        onChange={(city) => {
-                          register.officeCity = city.name;
-                          this.setState({register}, async () => {
-                            await this.loadBarangay(city.code);
-                          });
-                        }}  
-                        searchText={'Search'}
-                        cancelText={'Cancel'}
-                        style={styles.fullWidthInput}
-                        initValueTextStyle={styles.initValueTextStyle}
-                        searchStyle={styles.searchStyle}
-                        selectStyle={styles.selectStyle1}
-                        selectTextStyle={styles.selectTextStyle}
-                        sectionTextStyle={styles.sectionTextStyle}
-                        cancelStyle={styles.cancelStyle}
-                        cancelTextStyle={styles.cancelTextStyle}
-                        overlayStyle={styles.overlayStyle}
-                      />
-                      :
-                      <ModalSelector
-                        disabled={true}
-                        initValue="Select City"
-                        searchText={'Search'}
-                        cancelText={'Cancel'}
-                        style={styles.disabledFullWidthInput}
-                        initValueTextStyle={styles.initValueTextStyle}
-                        searchStyle={styles.searchStyle}
-                        selectStyle={styles.disabledSelectStyle}
-                        selectTextStyle={styles.selectTextStyle}
-                        sectionTextStyle={styles.sectionTextStyle}
-                        cancelStyle={styles.cancelStyle}
-                        cancelTextStyle={styles.cancelTextStyle}
-                        overlayStyle={styles.overlayStyle}
-                        touchableActiveOpacity={styles.touchableActiveOpacity}
-                      />
-                    }
-                  </View>
-
-                  {/* Barangay */}
-                  <View style={[styles.inputContainer, styles.marginTop]}>
-                    { register.officeCity !== '' ? 
-                      <ModalSelector
-                        data={this.state.barangayList}
-                        keyExtractor= {barangay => barangay.code}
-                        labelExtractor= {barangay => barangay.name}
-                        initValue="Select Barangay"
-                        onChange={(barangay) => {
-                          register.officeBarangay = barangay.name;
-                          this.setState({register});
-                        }} 
-                        searchText={'Search'}
-                        cancelText={'Cancel'}
-                        style={styles.fullWidthInput}
-                        initValueTextStyle={styles.initValueTextStyle}
-                        searchStyle={styles.searchStyle}
-                        selectStyle={styles.selectStyle1}
-                        selectTextStyle={styles.selectTextStyle}
-                        sectionTextStyle={styles.sectionTextStyle}
-                        cancelStyle={styles.cancelStyle}
-                        cancelTextStyle={styles.cancelTextStyle}
-                        overlayStyle={styles.overlayStyle}
-                      />
-                      :
-                      <ModalSelector
-                        disabled={true}
-                        initValue="Select Barangay"
-                        searchText={'Search'}
-                        cancelText={'Cancel'}
-                        style={styles.disabledFullWidthInput}
-                        initValueTextStyle={styles.initValueTextStyle}
-                        searchStyle={styles.searchStyle}
-                        selectStyle={styles.disabledSelectStyle}
-                        selectTextStyle={styles.selectTextStyle}
-                        sectionTextStyle={styles.sectionTextStyle}
-                        cancelStyle={styles.cancelStyle}
-                        cancelTextStyle={styles.cancelTextStyle}
-                        overlayStyle={styles.overlayStyle}
-                        touchableActiveOpacity={styles.touchableActiveOpacity}
-                      />
-                    }
-                  </View>
-
-                  <View style={styles.alignItemCenter}>
-                  {/* Next Button */}
-                    {/* Make button gray when not all inputs are filled out, orange when filled out */}
-                    { register.officeAddress == '' || register.officeRegion == '' || register.officeProvince == '' || register.officeCity == '' || register.officeBarangay == '' || register.officeZipcode == 0 ?
-                    <TouchableOpacity style={styles.nextButtonGray} disabled={true}>
-                      <Text style={styles.buttonText}> NEXT </Text>
-                    </TouchableOpacity>
                     :
-                    <TouchableOpacity style={styles.nextButtonOrange} onPress={() => this.signUp() }>
-                      <Text style={styles.buttonText}> NEXT </Text>
-                    </TouchableOpacity>
-                    }
-                  </View>
-                  
-                </ScrollView>
-              </KeyboardAvoidingView>
+                    <ModalSelector
+                      disabled={true}
+                      data={this.state.provinceList}
+                      initValue="Select Province"
+                      searchText={'Search'}
+                      cancelText={'Cancel'}
+                      style={styles.disabledFullWidthInput}
+                      initValueTextStyle={styles.initValueTextStyle}
+                      searchStyle={styles.searchStyle}
+                      selectStyle={styles.disabledSelectStyle}
+                      selectTextStyle={styles.selectTextStyle}
+                      sectionTextStyle={styles.sectionTextStyle}
+                      cancelStyle={styles.cancelStyle}
+                      cancelTextStyle={styles.cancelTextStyle}
+                      overlayStyle={styles.overlayStyle}
+                      touchableActiveOpacity={styles.touchableActiveOpacity}
+                    />
+                  }
+                </View>
 
-            </View>
+                {/* City */}
+                <View style={[styles.inputContainer, styles.marginTop]}>
+                  { register.officeProvince !== '' ?
+                    <ModalSelector
+                      data={this.state.cityList}
+                      keyExtractor= {city => city.code}
+                      labelExtractor= {city => city.name}
+                      initValue="Select City"
+                      onChange={(city) => {
+                        register.officeCity = city.name;
+                        this.setState({register}, async () => {
+                          await this.loadBarangay(city.code);
+                        });
+                      }}  
+                      searchText={'Search'}
+                      cancelText={'Cancel'}
+                      style={styles.fullWidthInput}
+                      initValueTextStyle={styles.initValueTextStyle}
+                      searchStyle={styles.searchStyle}
+                      selectStyle={styles.selectStyle1}
+                      selectTextStyle={styles.selectTextStyle}
+                      sectionTextStyle={styles.sectionTextStyle}
+                      cancelStyle={styles.cancelStyle}
+                      cancelTextStyle={styles.cancelTextStyle}
+                      overlayStyle={styles.overlayStyle}
+                    />
+                    :
+                    <ModalSelector
+                      disabled={true}
+                      initValue="Select City"
+                      searchText={'Search'}
+                      cancelText={'Cancel'}
+                      style={styles.disabledFullWidthInput}
+                      initValueTextStyle={styles.initValueTextStyle}
+                      searchStyle={styles.searchStyle}
+                      selectStyle={styles.disabledSelectStyle}
+                      selectTextStyle={styles.selectTextStyle}
+                      sectionTextStyle={styles.sectionTextStyle}
+                      cancelStyle={styles.cancelStyle}
+                      cancelTextStyle={styles.cancelTextStyle}
+                      overlayStyle={styles.overlayStyle}
+                      touchableActiveOpacity={styles.touchableActiveOpacity}
+                    />
+                  }
+                </View>
+
+                {/* Barangay */}
+                <View style={[styles.inputContainer, styles.marginTop]}>
+                  { register.officeCity !== '' ? 
+                    <ModalSelector
+                      data={this.state.barangayList}
+                      keyExtractor= {barangay => barangay.code}
+                      labelExtractor= {barangay => barangay.name}
+                      initValue="Select Barangay"
+                      onChange={(barangay) => {
+                        register.officeBarangay = barangay.name;
+                        this.setState({register});
+                      }} 
+                      searchText={'Search'}
+                      cancelText={'Cancel'}
+                      style={styles.fullWidthInput}
+                      initValueTextStyle={styles.initValueTextStyle}
+                      searchStyle={styles.searchStyle}
+                      selectStyle={styles.selectStyle1}
+                      selectTextStyle={styles.selectTextStyle}
+                      sectionTextStyle={styles.sectionTextStyle}
+                      cancelStyle={styles.cancelStyle}
+                      cancelTextStyle={styles.cancelTextStyle}
+                      overlayStyle={styles.overlayStyle}
+                    />
+                    :
+                    <ModalSelector
+                      disabled={true}
+                      initValue="Select Barangay"
+                      searchText={'Search'}
+                      cancelText={'Cancel'}
+                      style={styles.disabledFullWidthInput}
+                      initValueTextStyle={styles.initValueTextStyle}
+                      searchStyle={styles.searchStyle}
+                      selectStyle={styles.disabledSelectStyle}
+                      selectTextStyle={styles.selectTextStyle}
+                      sectionTextStyle={styles.sectionTextStyle}
+                      cancelStyle={styles.cancelStyle}
+                      cancelTextStyle={styles.cancelTextStyle}
+                      overlayStyle={styles.overlayStyle}
+                      touchableActiveOpacity={styles.touchableActiveOpacity}
+                    />
+                  }
+                </View>
+
+                <View style={styles.alignItemCenter}>
+                {/* Next Button */}
+                  {/* Make button gray when not all inputs are filled out, orange when filled out */}
+                  { register.officeAddress == '' || register.officeRegion == '' || register.officeProvince == '' || register.officeCity == '' || register.officeBarangay == '' || register.officeZipcode == 0 ?
+                  <TouchableOpacity style={styles.nextButtonGray} disabled={true}>
+                    <Text style={styles.buttonText}> NEXT </Text>
+                  </TouchableOpacity>
+                  :
+                  <TouchableOpacity style={styles.nextButtonOrange} onPress={() => this.signUp() }>
+                    <Text style={styles.buttonText}> NEXT </Text>
+                  </TouchableOpacity>
+                  }
+                </View>
+                
+              </ScrollView>
+            </KeyboardAvoidingView>
+
           </View>
-        </ImageBackground>
+        </View>
       </View>
     )
   }
@@ -323,11 +319,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1, 
     justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  image: {
-    flex: 1,
-    justifyContent: 'center',
+    backgroundColor: 'rgb(238, 241, 217)',
   },
   innerContainer: {
     flex: 1,
@@ -341,8 +333,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   logo: {
-    height: 50,
-    width: 240,
+    height: 70,
+    width: 250,
     marginTop: '25%',
     marginBottom: '15%',
   },
@@ -358,7 +350,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: 'white',
+    color: 'black',
     marginBottom: '5%',
     fontWeight: 'bold'
   }, 
@@ -367,6 +359,8 @@ const styles = StyleSheet.create({
     width: '90%',
     height: 50,
     borderRadius: 25,
+    borderColor: 'rgb(223,131,68)',
+    borderWidth: 1,
     paddingLeft: '5%'
   },
   regionInput: {
@@ -377,6 +371,8 @@ const styles = StyleSheet.create({
     width: '25%',
     height: 50,
     borderRadius: 25,
+    borderColor: 'rgb(223,131,68)',
+    borderWidth: 1,
     textAlign: 'center',
     marginLeft: '3%'
   },
@@ -392,7 +388,7 @@ const styles = StyleSheet.create({
   selectStyle1: {
     backgroundColor: 'white',
     width: '100%',
-    height: 50,
+    height: 48,
     borderRadius: 25,
     borderWidth: 0,
     justifyContent: 'center',
@@ -403,7 +399,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     borderRadius: 25,
-    borderWidth: 0,
+    borderColor: 'rgb(223,131,68)',
+    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
     paddingLeft: '10%'
@@ -437,12 +434,14 @@ const styles = StyleSheet.create({
     width: '90%',
     height: 50,
     borderRadius: 25,
+    borderColor: 'rgb(223,131,68)',
+    borderWidth: 1,
     paddingLeft: '5%'
   },
   disabledSelectStyle: {
     backgroundColor: 'rgb(222, 223, 228)',
     width: '100%',
-    height: 50,
+    height: 48,
     borderRadius: 25,
     borderWidth: 0,
     justifyContent: 'center',

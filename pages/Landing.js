@@ -5,7 +5,7 @@ import { EventRegister } from 'react-native-event-listeners'
 import { CustomerApi } from '../api/customer'; 
 import { getStorage, setStorage } from '../api/helper/storage';
 
-const bgImage = '../assets/bg-image.png';
+const bgImage = '../assets/bg-image.jpg';
 
 export default class Landing extends Component {  
   constructor() {
@@ -14,6 +14,7 @@ export default class Landing extends Component {
     this.state = { 
       username: '',
       password: '', 
+      user: {},
       remember: false,
       error: false,
     };
@@ -47,15 +48,26 @@ export default class Landing extends Component {
           this.setState({ error: true });
         }
         if(res) {
-          await setStorage('user', res)
-          this.props.navigation.navigate('Dashboard');
+          this.customerTypeRouting(res);
         }
       }
     } else {
       await setStorage('loginInfo', null)
       setTimeout(() => {
-        this.props.navigation.navigate('Start')
-        }, 1000);
+        this.props.navigation.navigate('Start1')
+      }, 1000);
+    }
+  }
+
+  async customerTypeRouting(res) {
+    await setStorage('user', res)
+    let user = await getStorage('user')
+    this.setState({user})
+    let customerType = this.state.user.customer_type
+    if(customerType == 'Individual') {
+      this.props.navigation.navigate('IndivDashboard')
+    } else if (customerType == 'Corporate') {
+      this.props.navigation.navigate('CorpDashboard');
     }
   }
   
@@ -68,29 +80,23 @@ export default class Landing extends Component {
       });
     }
   }
-  
-  setModalVisible = (visible) => {
-    this.setState({ modalVisible: visible });
-  }
 
   render() {
     return(
       <View style={styles.container}>
-        <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
-          <View style={styles.innerContainer}>
-            <View style={styles.content}>
+        <View style={styles.innerContainer}>
+          <View style={styles.content}>
 
-              {/* Logo */}
-              <View style={styles.alignItemCenter}>
-                <Image
-                  source={require('../assets/logo/logo.png')}
-                  style={styles.logo}
-                />
-              </View>
-
+            {/* Logo */}
+            <View style={styles.alignItemCenter}>
+              <Image
+                source={require('../assets/logo/logo-primary.png')}
+                style={styles.logo}
+              />
             </View>
+
           </View>
-        </ImageBackground>
+        </View>
       </View>
     )
   }
@@ -101,11 +107,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1, 
     justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  image: {
-    flex: 1,
-    justifyContent: 'center',
+    backgroundColor: 'rgb(238, 241, 217)',
   },
   innerContainer: {
     flex: 1,
@@ -118,8 +120,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    height: 50,
-    width: 240,
-    marginBottom: '15%',
+    height: 90,
+    width: '80%',
   },
 })

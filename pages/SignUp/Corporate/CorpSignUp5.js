@@ -5,8 +5,6 @@ import * as DocumentPicker from 'expo-document-picker'
 
 import { getStorage, setStorage } from '../../../api/helper/storage';
 
-const bgImage = '../../../assets/bg-image.png';
-
 export default class CorpSignUp5 extends Component {  
   constructor(props) {
     super(props);
@@ -113,106 +111,104 @@ export default class CorpSignUp5 extends Component {
     let register = this.state.register;
     return(
       <View style={styles.container}>
-        <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
-          <View style={styles.innerContainer}>
-            <View style={styles.content}>
+        <View style={styles.innerContainer}>
+          <View style={styles.content}>
 
-              <KeyboardAvoidingView behavior='padding'>
-                <ScrollView>
-                  {/* Logo */}
-                  <View style={styles.alignItemCenter}>
-                    <Image
-                      source={require('../../../assets/logo/logo.png')}
-                      style={styles.logo}
-                    />
+            <KeyboardAvoidingView behavior='padding'>
+              <ScrollView>
+                {/* Logo */}
+                <View style={styles.alignItemCenter}>
+                  <Image
+                    source={require('../../../assets/logo/logo-primary.png')}
+                    style={styles.logo}
+                  />
+                </View>
+
+                <View style={[styles.inputContainer]}>
+                  {/* Header */}
+                  <View style={[styles.alignItemCenter]}>
+                    <Text style={styles.headerText}>
+                      Document Upload
+                    </Text>
                   </View>
 
-                  <View style={[styles.inputContainer]}>
-                    {/* Header */}
-                    <View style={[styles.alignItemCenter]}>
-                      <Text style={styles.headerText}>
-                        Document Upload
-                      </Text>
-                    </View>
-
-                    {/* BIR */}
-                    <View style={[styles.uploadContainer]}>
-                      <Text style={styles.text}>
-                        BIR Cert. of Registration (Form 2303):
-                      </Text>
-                      <TouchableOpacity style={[styles.uploadButton]} onPress={() => this.selectBIRFile()}>
-                        <View style={styles.uploadFileName}>
-                          { register.bir == null ?
-                            <Text style={styles.uploadFileNameText}>  Upload File </Text>
-                          :
-                            <Text numberOfLines={1} style={styles.uploadFileNameText}> {register.bir.name} </Text>
-                          }
-                        </View>
-                        <View style={styles.uploadButtonColor}>
-                          <Text style={styles.uploadButtonText}>Upload</Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-
-                    {/* DTI */}
-                    <View style={[styles.uploadContainer, styles.marginTop]}>
-                      <Text style={styles.text}>
-                        DTI / SEC
-                      </Text>
-                      <TouchableOpacity style={[styles.uploadButton]} onPress={() => this.selectDTIFile()}>
-                        <View style={styles.uploadFileName}>
-                          { register.dti == null ?
-                            <Text style={styles.uploadFileNameText}>  Upload File </Text>
-                          :
-                            <Text numberOfLines={1} style={styles.uploadFileNameText}> {register.dti.name} </Text>
-                          }
-                        </View>
-                        <View style={styles.uploadButtonColor}>
-                          <Text style={styles.uploadButtonText}>Upload</Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-
-                    {/* Valid ID */}
-                    <View style={[styles.uploadContainer, styles.marginTop]}>
-                      <Text style={styles.text}>
-                        Valid ID (UMID, Driver's License, Passport)
-                      </Text>
-                      <TouchableOpacity style={[styles.uploadButton]} onPress={() => this.selectValidId()}>
-                        <View style={styles.uploadFileName}>
-                          { register.validId == null ?
-                            <Text style={styles.uploadFileNameText}>  Upload File </Text>
-                          :
-                            <Text numberOfLines={1} style={styles.uploadFileNameText}> {register.validId.name} </Text>
-                          }
-                        </View>
-                        <View style={styles.uploadButtonColor}>
-                          <Text style={styles.uploadButtonText}>Upload</Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-
-                  <View style={styles.alignItemCenter}>
-                  {/* Next Button */}
-                    {/* Make button gray when not all inputs are filled out, orange when filled out */}
-                    { register.bir == null || register.dti == null || register.validId == null ?
-                    <TouchableOpacity style={styles.nextButtonGray} disabled={true}>
-                      <Text style={styles.buttonText}> NEXT </Text>
+                  {/* BIR */}
+                  <View style={[styles.uploadContainer]}>
+                    <Text style={styles.text}>
+                      BIR Cert. of Registration (Form 2303):
+                    </Text>
+                    <TouchableOpacity style={[styles.uploadButton]} onPress={() => this.selectBIRFile()}>
+                      <View style={styles.uploadFileName}>
+                        { register.bir == null ?
+                          <Text style={styles.uploadFileNameText}>  Upload File </Text>
+                        :
+                          <Text numberOfLines={1} style={styles.uploadFileNameText}> {register.bir.name} </Text>
+                        }
+                      </View>
+                      <View style={styles.uploadButtonColor}>
+                        <Text style={styles.uploadButtonText}>Upload</Text>
+                      </View>
                     </TouchableOpacity>
-                    :
-                    <TouchableOpacity style={styles.nextButtonOrange} onPress={() => this.signUp() }>
-                      <Text style={styles.buttonText}> NEXT </Text>
-                    </TouchableOpacity>
-                    }
                   </View>
-                  
-                  </ScrollView>
-              </KeyboardAvoidingView>
 
-            </View>
+                  {/* DTI */}
+                  <View style={[styles.uploadContainer, styles.marginTop]}>
+                    <Text style={styles.text}>
+                      DTI / SEC
+                    </Text>
+                    <TouchableOpacity style={[styles.uploadButton]} onPress={() => this.selectDTIFile()}>
+                      <View style={styles.uploadFileName}>
+                        { register.dti == null ?
+                          <Text style={styles.uploadFileNameText}>  Upload File </Text>
+                        :
+                          <Text numberOfLines={1} style={styles.uploadFileNameText}> {register.dti.name} </Text>
+                        }
+                      </View>
+                      <View style={styles.uploadButtonColor}>
+                        <Text style={styles.uploadButtonText}>Upload</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* Valid ID */}
+                  <View style={[styles.uploadContainer, styles.marginTop]}>
+                    <Text style={styles.text}>
+                      Valid ID (UMID, Driver's License, Passport)
+                    </Text>
+                    <TouchableOpacity style={[styles.uploadButton]} onPress={() => this.selectValidId()}>
+                      <View style={styles.uploadFileName}>
+                        { register.validId == null ?
+                          <Text style={styles.uploadFileNameText}>  Upload File </Text>
+                        :
+                          <Text numberOfLines={1} style={styles.uploadFileNameText}> {register.validId.name} </Text>
+                        }
+                      </View>
+                      <View style={styles.uploadButtonColor}>
+                        <Text style={styles.uploadButtonText}>Upload</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <View style={styles.alignItemCenter}>
+                {/* Next Button */}
+                  {/* Make button gray when not all inputs are filled out, orange when filled out */}
+                  { register.bir == null || register.dti == null || register.validId == null ?
+                  <TouchableOpacity style={styles.nextButtonGray} disabled={true}>
+                    <Text style={styles.buttonText}> NEXT </Text>
+                  </TouchableOpacity>
+                  :
+                  <TouchableOpacity style={styles.nextButtonOrange} onPress={() => this.signUp() }>
+                    <Text style={styles.buttonText}> NEXT </Text>
+                  </TouchableOpacity>
+                  }
+                </View>
+                
+                </ScrollView>
+            </KeyboardAvoidingView>
+
           </View>
-        </ImageBackground>
+        </View>
       </View>
     )
   }
@@ -223,11 +219,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1, 
     justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  image: {
-    flex: 1,
-    justifyContent: 'center',
+    backgroundColor: 'rgb(238, 241, 217)',
   },
   innerContainer: {
     flex: 1,
@@ -241,14 +233,14 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   logo: {
-    height: 50,
-    width: 240,
+    height: 70,
+    width: 250,
     marginTop: '25%',
     marginBottom: '15%',
   },
   headerText: {
     fontSize: 18,
-    color: 'white',
+    color: 'black',
     marginBottom: '10%',
     fontWeight: 'bold'
   }, 
@@ -261,7 +253,9 @@ const styles = StyleSheet.create({
     height: '20%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10
+    borderRadius: 10,
+    borderColor: 'rgb(223,131,68)',
+    borderWidth: 1,
   },
   uploadButton: {
     flexDirection: 'row',
@@ -303,7 +297,7 @@ const styles = StyleSheet.create({
   },
   nextButtonGray: {
     height: 50,
-    width: '100%',
+    width: '90%',
     borderRadius: 25,
     justifyContent:'center',
     alignItems: 'center',
@@ -315,7 +309,7 @@ const styles = StyleSheet.create({
   },
   nextButtonOrange: {
     height: 50,
-    width: '100%',
+    width: '90%',
     borderRadius: 25,
     justifyContent:'center',
     alignItems: 'center',

@@ -1,8 +1,6 @@
 import React, { Component }  from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
-const bgImage = '../../assets/bg-image.png';
-
 export default class ForgotPassword extends Component {  
   constructor() {
     super();
@@ -16,14 +14,13 @@ export default class ForgotPassword extends Component {
     return(
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
-          <ImageBackground source={require(bgImage)} resizeMode='cover' style={styles.image}>
             <View style={styles.innerContainer}>
               <View style={styles.content}>
 
                 {/* Logo */}
                 <View style={styles.alignItemCenter}>
                   <Image
-                    source={require('../../assets/logo/logo.png')}
+                    source={require('../../assets/logo/logo-primary.png')}
                     style={styles.logo}
                   />
                 </View>
@@ -44,6 +41,7 @@ export default class ForgotPassword extends Component {
                       <TextInput
                         style={styles.input}
                         onChangeText={(val) => {this.setState({email: val})}}  
+                        keyboardType={'email-address'}
                       />
                     </View>
                   </View>
@@ -65,7 +63,6 @@ export default class ForgotPassword extends Component {
 
               </View>
             </View>
-          </ImageBackground>
         </View>
       </TouchableWithoutFeedback>
     )
@@ -77,11 +74,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1, 
     justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  image: {
-    flex: 1,
-    justifyContent: 'center',
+    backgroundColor: 'rgb(238, 241, 217)',
   },
   innerContainer: {
     flex: 1,
@@ -94,9 +87,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   logo: {
-    height: 50,
-    width: 240,
-    marginBottom: '15%',
+    height: 60,
+    width: 275,
+    marginBottom: '20%',
   },
   inputPart: {
     marginTop: 10,
@@ -111,17 +104,19 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     borderRadius: 25,
+    borderColor: 'rgb(223,131,68)',
+    borderWidth: 1,
     backgroundColor: 'white'
   },
   label: {
-    color: 'white',
+    color: 'black',
     fontSize: 18,
     fontWeight:'bold',
     marginBottom: 30
   },
   text: {
     fontSize: 15,
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
     marginBottom: 30
   },
@@ -132,7 +127,7 @@ const styles = StyleSheet.create({
   },
   emailText: {
     fontSize: 15,
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
     marginBottom: 10
   },

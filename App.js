@@ -4,7 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Landing from './pages/Landing';
-import Start from './pages/Start';
+import Start1 from './pages/Start/Start1';
+import Start2 from './pages/Start/Start2';
 import Login from './pages/Login/Login';
 import ForgotPassword from './pages/Login/ForgotPassword';
 import IndivSignUp1 from './pages/SignUp/Individual/IndivSignUp1';
@@ -16,21 +17,19 @@ import CorpSignUp3 from './pages/SignUp/Corporate/CorpSignUp3';
 import CorpSignUp4 from './pages/SignUp/Corporate/CorpSignUp4';
 import CorpSignUp5 from './pages/SignUp/Corporate/CorpSignUp5';
 import CorpSignUp6 from './pages/SignUp/Corporate/CorpSignUp6';
-import QuickQuotation1 from './pages/Booking/QuickQuotation/QuickQuotation1';
-import QuickQuotation2 from './pages/Booking/QuickQuotation/QuickQuotation2';
-import QuickQuotation3 from './pages/Booking/QuickQuotation/QuickQuotation3';
-import QuickQuotation4 from './pages/Booking/QuickQuotation/QuickQuotation4';
-import Exclusive1 from './pages/Booking/Exclusive/Exclusive1';
-import Exclusive2 from './pages/Booking/Exclusive/Exclusive2';
-import Exclusive3 from './pages/Booking/Exclusive/Exclusive3';
-import Exclusive4 from './pages/Booking/Exclusive/Exclusive4';
-import Dashboard from './pages/Dashboard';
+import QuickQuotation1 from './pages/QuickQuotation/QuickQuotation1';
+import QuickQuotation2 from './pages/QuickQuotation/QuickQuotation2';
+import QuickQuotation3 from './pages/QuickQuotation/QuickQuotation3';
+import QuickQuotation4 from './pages/QuickQuotation/QuickQuotation4';
+import CorpExclusive1 from './pages/CorporateSide/CorpBooking/Exclusive/CorpExclusive1';
+import CorpExclusive2 from './pages/CorporateSide/CorpBooking/Exclusive/CorpExclusive2';
+import CorpExclusive3 from './pages/CorporateSide/CorpBooking/Exclusive/CorpExclusive3';
+import CorpExclusive4 from './pages/CorporateSide/CorpBooking/Exclusive/CorpExclusive4';
+import CorpExclusive5 from './pages/CorporateSide/CorpBooking/Exclusive/CorpExclusive5';
+import CorpExclusive6 from './pages/CorporateSide/CorpBooking/Exclusive/CorpExclusive6';
+import CorpDashboard from './pages/CorporateSide/CorpDashboard';
+import IndivDashboard from './pages/IndividualSide/IndivDashboard';
 
-// in Hidden folder 
-// import IndivSignUp4 from './pages/SignUp/Individual/IndivSignUp4';
-// import CorpSignUp7 from './pages/SignUp/Corporate/CorpSignUp7';
-// import Exclusive4 from './pages/Booking/Exclusive/Exclusive4';
-// import Booking from './pages/Booking/Booking';
 
 const forFade = ({ current }) => ({
   cardStyle: {
@@ -46,11 +45,12 @@ export default class App extends Component{
     return (
     // put pages in the Stack for the Navigation
     <NavigationContainer>
-        <StatusBar style="light" />
-        <Stack.Navigator initialRouteName="Exclusive4" screenOptions={{headerShown: false}}>
+        <StatusBar style="dark" />
+        <Stack.Navigator initialRouteName="Landing" screenOptions={{headerShown: false}} >
           <Stack.Screen name="Landing" component={Landing} />
-          <Stack.Screen name="Start" component={Start} options={{ cardStyleInterpolator: forFade, gestureEnabled: false }} />
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Start1" component={Start1} options={{ cardStyleInterpolator: forFade, gestureEnabled: false }} />
+          <Stack.Screen name="Start2" component={Start2} options={{ cardStyleInterpolator: forFade}} />
+          <Stack.Screen name="Login" component={Login} options={{ cardStyleInterpolator: forFade, gestureEnabled: false }} />
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
           <Stack.Screen name="IndivSignUp1" component={IndivSignUp1} options={{ cardStyleInterpolator: forFade }} />
           <Stack.Screen name="IndivSignUp2" component={IndivSignUp2} />
@@ -61,21 +61,20 @@ export default class App extends Component{
           <Stack.Screen name="CorpSignUp4" component={CorpSignUp4} />
           <Stack.Screen name="CorpSignUp5" component={CorpSignUp5} />
           <Stack.Screen name="CorpSignUp6" component={CorpSignUp6} />
-          <Stack.Screen name="QuickQuotation1" component={QuickQuotation1} />
+          <Stack.Screen name="QuickQuotation1" component={QuickQuotation1} options={{ cardStyleInterpolator: forFade, gestureEnabled: false }} />
           <Stack.Screen name="QuickQuotation2" component={QuickQuotation2} />
           <Stack.Screen name="QuickQuotation3" component={QuickQuotation3} />
           <Stack.Screen name="QuickQuotation4" component={QuickQuotation4} />
-          <Stack.Screen name="Exclusive1" component={Exclusive1} />
-          <Stack.Screen name="Exclusive2" component={Exclusive2} />
-          <Stack.Screen name="Exclusive3" component={Exclusive3} />
-          <Stack.Screen name="Exclusive4" component={Exclusive4} />
-          <Stack.Screen name="Dashboard" component={Dashboard} options={{ gestureEnabled: false }}/>
+          <Stack.Screen name="CorpExclusive1" component={CorpExclusive1} />
+          <Stack.Screen name="CorpExclusive2" component={CorpExclusive2} />
+          <Stack.Screen name="CorpExclusive3" component={CorpExclusive3} />
+          <Stack.Screen name="CorpExclusive4" component={CorpExclusive4} />
+          <Stack.Screen name="CorpExclusive5" component={CorpExclusive5} />
+          <Stack.Screen name="CorpExclusive6" component={CorpExclusive6} options={{ gestureEnabled: false }} />
+          <Stack.Screen name="CorpDashboard" component={CorpDashboard} options={{ gestureEnabled: false }} />
+          <Stack.Screen name="IndivDashboard" component={IndivDashboard} options={{ gestureEnabled: false }} />
 
-          {/* Hidden Pages */}
-          {/* <Stack.Screen name="IndivSignUp4" component={IndivSignUp4} />
-          <Stack.Screen name="CorpSignUp7" component={CorpSignUp7} />
-          <Stack.Screen name="Exclusive4" component={Exclusive4} />
-          <Stack.Screen name="Booking" component={Booking} /> */}
+          {/* There are Pages in the Archive and Hidden Folder */}
 
         </Stack.Navigator>
       </NavigationContainer>
